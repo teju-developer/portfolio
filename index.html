@@ -1,0 +1,2205 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <!-- Primary Meta Tags -->
+  <title>Tejashwini Suresh Sonnad | Aspiring VLSI & Digital Design Engineer</title>
+  <meta name="title" content="Tejashwini Suresh Sonnad | Aspiring VLSI & Digital Design Engineer" />
+  <meta name="description" content="Personal portfolio of Tejashwini Suresh Sonnad – Aspiring VLSI & Digital Design Engineer and Python Developer. Final-year ECE student at KLE Institute of Technology, Hubballi." />
+  <meta name="keywords" content="Tejashwini Suresh Sonnad, VLSI, Digital Design Engineer, Verilog HDL, ModelSim, UART Controller, FIFO, FPGA, Embedded Systems, Python Developer, KLE Tech" />
+  <meta name="author" content="Tejashwini Suresh Sonnad" />
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://github.com/teju-developer" />
+  <meta property="og:title" content="Tejashwini Suresh Sonnad | Aspiring VLSI & Digital Design Engineer" />
+  <meta property="og:description" content="Personal portfolio showcasing UART Controller in Verilog HDL, digital design architecture, ModelSim verification, and Python applications." />
+  <meta property="og:image" content="public/uart-block-diagram.svg" />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="public/favicon.svg" />
+
+  <!-- Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS CDN with Custom Extended Config -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            navy: {
+              950: '#050811',
+              900: '#090d1a',
+              850: '#0d1326',
+              800: '#131b33',
+              700: '#1e294b'
+            },
+            cyan: {
+              accent: '#00f0ff',
+              400: '#22d3ee',
+              500: '#06b6d4',
+            },
+            violet: {
+              accent: '#a855f7'
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace']
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    /* Base Reset & Custom Styling */
+    html {
+      scroll-behavior: smooth;
+      color-scheme: dark;
+    }
+    body {
+      background-color: #060810;
+      color: #e2e8f0;
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+    }
+    .glass-panel {
+      background: rgba(13, 19, 38, 0.65);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(56, 189, 248, 0.15);
+    }
+    .glass-panel-hover {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .glass-panel-hover:hover {
+      background: rgba(18, 26, 52, 0.85);
+      border-color: rgba(56, 189, 248, 0.35);
+      box-shadow: 0 10px 30px -10px rgba(0, 240, 255, 0.2);
+      transform: translateY(-2px);
+    }
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #060810;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1e293b;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #0ea5e9;
+    }
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 0.3; transform: scale(1); }
+      50% { opacity: 0.6; transform: scale(1.05); }
+    }
+    .animate-glow-slow {
+      animation: pulseGlow 6s ease-in-out infinite;
+    }
+  </style>
+</head>
+<body class="relative min-h-screen bg-[#060810] text-slate-100 selection:bg-cyan-500 selection:text-slate-950">
+
+  <!-- Interactive Circuit Canvas Animation -->
+  <canvas id="circuitCanvas" class="fixed inset-0 pointer-events-none z-0 opacity-60"></canvas>
+
+  <!-- Background Ambient Glows -->
+  <div class="fixed top-1/4 left-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-[140px] pointer-events-none animate-glow-slow"></div>
+  <div class="fixed bottom-1/4 right-1/4 w-96 h-96 bg-purple-600/10 rounded-full blur-[160px] pointer-events-none animate-glow-slow" style="animation-delay: -3s;"></div>
+
+  <!-- Main Application Wrapper -->
+  <div class="relative z-10 flex flex-col min-h-screen">
+
+    <!-- NAVBAR -->
+    <header id="mainNav" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-[#060810]/85 backdrop-blur-md border-b border-cyan-500/20 py-3.5 shadow-[0_4px_30px_rgba(0,0,0,0.5)]">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+        
+        <!-- Brand Logo -->
+        <a href="#" class="flex items-center gap-3 group">
+          <div class="relative w-10 h-10 rounded-lg bg-gradient-to-br from-cyan-500/20 to-purple-600/20 border border-cyan-500/40 flex items-center justify-center p-1.5 transition-transform duration-300 group-hover:scale-105 group-hover:border-cyan-400 shadow-[0_0_15px_rgba(0,240,255,0.2)]">
+            <i data-lucide="cpu" class="w-6 h-6 text-cyan-400 group-hover:text-cyan-300 transition-colors"></i>
+            <span class="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-cyan-400 animate-ping opacity-75"></span>
+            <span class="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-cyan-400"></span>
+          </div>
+          <div>
+            <div class="text-white font-bold tracking-tight text-base sm:text-lg flex items-center gap-1.5">
+              Tejashwini S Sonnad
+            </div>
+            <div class="text-[10px] sm:text-xs font-mono text-cyan-400 tracking-wider">
+              VLSI &bull; DIGITAL DESIGN &bull; PYTHON
+            </div>
+          </div>
+        </a>
+
+        <!-- Desktop Navigation Links -->
+        <nav class="hidden md:flex items-center gap-1 lg:gap-2">
+          <a href="#about" class="px-3 py-1.5 text-sm font-medium text-slate-300 hover:text-cyan-400 rounded-md transition-colors hover:bg-cyan-500/10">About</a>
+          <a href="#skills" class="px-3 py-1.5 text-sm font-medium text-slate-300 hover:text-cyan-400 rounded-md transition-colors hover:bg-cyan-500/10">Skills</a>
+          <a href="#projects" class="px-3 py-1.5 text-sm font-medium text-slate-300 hover:text-cyan-400 rounded-md transition-colors hover:bg-cyan-500/10">Projects</a>
+          <a href="#education" class="px-3 py-1.5 text-sm font-medium text-slate-300 hover:text-cyan-400 rounded-md transition-colors hover:bg-cyan-500/10">Education</a>
+          <a href="#certifications" class="px-3 py-1.5 text-sm font-medium text-slate-300 hover:text-cyan-400 rounded-md transition-colors hover:bg-cyan-500/10">Certifications</a>
+          <a href="#contact" class="px-3 py-1.5 text-sm font-medium text-slate-300 hover:text-cyan-400 rounded-md transition-colors hover:bg-cyan-500/10">Contact</a>
+        </nav>
+
+        <!-- Actions -->
+        <div class="hidden lg:flex items-center gap-3">
+          <a href="https://github.com/teju-developer" target="_blank" rel="noopener noreferrer" aria-label="GitHub Profile" class="p-2 text-slate-400 hover:text-cyan-400 rounded-lg hover:bg-slate-800/60 transition-colors" title="GitHub">
+            <i data-lucide="github" class="w-5 h-5"></i>
+          </a>
+          <a href="https://www.linkedin.com/in/tejashwini-sonnad-9380a72aa" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn Profile" class="p-2 text-slate-400 hover:text-cyan-400 rounded-lg hover:bg-slate-800/60 transition-colors" title="LinkedIn">
+            <i data-lucide="linkedin" class="w-5 h-5"></i>
+          </a>
+          <button onclick="openResumeModal()" class="inline-flex items-center gap-2 px-4 py-2 text-xs font-mono font-semibold uppercase tracking-wider text-cyan-300 bg-cyan-950/40 hover:bg-cyan-500/20 border border-cyan-500/40 hover:border-cyan-400 rounded-lg transition-all duration-200 shadow-[0_0_12px_rgba(0,240,255,0.15)] hover:shadow-[0_0_20px_rgba(0,240,255,0.3)]">
+            <i data-lucide="file-text" class="w-4 h-4"></i>
+            Resume
+          </button>
+        </div>
+
+        <!-- Mobile Menu Toggle Button -->
+        <div class="flex md:hidden items-center gap-2">
+          <button onclick="openResumeModal()" class="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-mono font-semibold text-cyan-300 bg-cyan-950/40 border border-cyan-500/40 rounded-lg">
+            <i data-lucide="file-text" class="w-3.5 h-3.5"></i>
+            CV
+          </button>
+          <button id="mobileMenuBtn" aria-label="Toggle navigation menu" class="p-2 text-slate-300 hover:text-cyan-400 rounded-lg hover:bg-slate-800 focus:outline-none">
+            <i data-lucide="menu" class="w-6 h-6"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Mobile Dropdown Menu -->
+      <div id="mobileMenu" class="hidden md:hidden bg-[#0a0f1f]/95 border-b border-cyan-500/30 px-6 py-5 shadow-2xl backdrop-blur-xl">
+        <div class="flex flex-col space-y-3 font-medium">
+          <a href="#about" class="px-3 py-2 text-slate-200 hover:text-cyan-400 hover:bg-cyan-500/10 rounded-md transition-colors mobile-link">About</a>
+          <a href="#skills" class="px-3 py-2 text-slate-200 hover:text-cyan-400 hover:bg-cyan-500/10 rounded-md transition-colors mobile-link">Skills</a>
+          <a href="#projects" class="px-3 py-2 text-slate-200 hover:text-cyan-400 hover:bg-cyan-500/10 rounded-md transition-colors mobile-link">Projects</a>
+          <a href="#education" class="px-3 py-2 text-slate-200 hover:text-cyan-400 hover:bg-cyan-500/10 rounded-md transition-colors mobile-link">Education</a>
+          <a href="#certifications" class="px-3 py-2 text-slate-200 hover:text-cyan-400 hover:bg-cyan-500/10 rounded-md transition-colors mobile-link">Certifications</a>
+          <a href="#contact" class="px-3 py-2 text-slate-200 hover:text-cyan-400 hover:bg-cyan-500/10 rounded-md transition-colors mobile-link">Contact</a>
+          <div class="pt-4 border-t border-slate-800 flex items-center justify-between">
+            <div class="flex gap-3">
+              <a href="https://github.com/teju-developer" target="_blank" rel="noopener noreferrer" class="p-2 text-slate-400 hover:text-cyan-400"><i data-lucide="github" class="w-5 h-5"></i></a>
+              <a href="https://www.linkedin.com/in/tejashwini-sonnad-9380a72aa" target="_blank" rel="noopener noreferrer" class="p-2 text-slate-400 hover:text-cyan-400"><i data-lucide="linkedin" class="w-5 h-5"></i></a>
+              <a href="mailto:sonnadtejashwini@gmail.com" class="p-2 text-slate-400 hover:text-cyan-400"><i data-lucide="mail" class="w-5 h-5"></i></a>
+            </div>
+            <button onclick="openResumeModal()" class="px-4 py-2 text-xs font-mono font-bold text-cyan-300 bg-cyan-950/60 border border-cyan-500/50 rounded-lg">View Resume</button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main class="flex-grow">
+      
+      <!-- HERO SECTION -->
+      <section class="relative min-h-screen pt-32 pb-16 flex items-center justify-center overflow-hidden">
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            
+            <!-- Hero Content -->
+            <div class="lg:col-span-7 space-y-6 text-left">
+              <!-- Live Status Pill -->
+              <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-cyan-950/60 border border-cyan-500/30 text-xs font-mono text-cyan-300">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span>Available for Entry-Level Roles &bull; 2027 Grad</span>
+              </div>
+
+              <!-- Greeting & Headline -->
+              <div class="space-y-2">
+                <p class="text-base sm:text-lg font-mono text-cyan-400 tracking-wide">
+                  Hi, I'm Tejashwini Suresh Sonnad
+                </p>
+                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-[1.15]">
+                  Aspiring <span class="bg-gradient-to-r from-cyan-400 via-sky-300 to-purple-400 bg-clip-text text-transparent">VLSI &amp; Digital Design</span> Engineer
+                </h1>
+              </div>
+
+              <!-- Supporting Text -->
+              <p class="text-base sm:text-lg text-slate-300 max-w-2xl leading-relaxed">
+                Electronics and Communication Engineering student passionate about Digital Design, Verilog HDL, FPGA concepts, Embedded Systems and Python Development. I enjoy designing digital systems and transforming ideas into practical engineering solutions.
+              </p>
+
+              <!-- CTA Buttons -->
+              <div class="flex flex-wrap items-center gap-4 pt-2">
+                <a href="#projects" class="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl font-semibold text-sm bg-gradient-to-r from-cyan-500 to-blue-600 text-slate-950 hover:from-cyan-400 hover:to-blue-500 transition-all duration-200 shadow-[0_0_25px_rgba(0,240,255,0.35)] hover:shadow-[0_0_35px_rgba(0,240,255,0.5)] transform hover:-translate-y-0.5">
+                  Explore My Projects
+                  <i data-lucide="arrow-right" class="w-4 h-4 text-slate-950"></i>
+                </a>
+
+                <button onclick="downloadResume()" class="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl font-semibold text-sm text-cyan-300 bg-slate-900/80 hover:bg-cyan-950/40 border border-cyan-500/40 hover:border-cyan-400 transition-all duration-200 shadow-[0_0_15px_rgba(0,240,255,0.1)] hover:shadow-[0_0_20px_rgba(0,240,255,0.25)] transform hover:-translate-y-0.5">
+                  <i data-lucide="download" class="w-4 h-4 text-cyan-400"></i>
+                  Download Resume
+                </button>
+              </div>
+
+              <!-- Social Links & Email -->
+              <div class="flex items-center gap-4 pt-4 text-slate-400">
+                <span class="text-xs font-mono text-slate-500 uppercase tracking-wider">Connect:</span>
+                <a href="https://github.com/teju-developer" target="_blank" rel="noopener noreferrer" class="p-2.5 rounded-lg bg-slate-900/60 border border-slate-800 hover:border-cyan-500/50 hover:text-cyan-400 transition-colors" title="GitHub">
+                  <i data-lucide="github" class="w-5 h-5"></i>
+                </a>
+                <a href="https://www.linkedin.com/in/tejashwini-sonnad-9380a72aa" target="_blank" rel="noopener noreferrer" class="p-2.5 rounded-lg bg-slate-900/60 border border-slate-800 hover:border-cyan-500/50 hover:text-cyan-400 transition-colors" title="LinkedIn">
+                  <i data-lucide="linkedin" class="w-5 h-5"></i>
+                </a>
+                <a href="mailto:sonnadtejashwini@gmail.com" class="p-2.5 rounded-lg bg-slate-900/60 border border-slate-800 hover:border-cyan-500/50 hover:text-cyan-400 transition-colors" title="Email">
+                  <i data-lucide="mail" class="w-5 h-5"></i>
+                </a>
+                <div class="hidden sm:flex items-center gap-1.5 text-xs font-mono text-slate-400 pl-2">
+                  <i data-lucide="map-pin" class="w-3.5 h-3.5 text-cyan-400"></i>
+                  <span>Vijayapura, Karnataka</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Semiconductor Die & Live Architecture Simulator -->
+            <div class="lg:col-span-5">
+              <div class="relative mx-auto max-w-md lg:max-w-none">
+                
+                <!-- Silicon IC Package Card -->
+                <div class="relative rounded-2xl bg-[#090e1c]/90 border border-cyan-500/30 p-5 sm:p-6 shadow-[0_0_50px_rgba(0,240,255,0.15)] backdrop-blur-xl">
+                  
+                  <!-- IC Header -->
+                  <div class="flex items-center justify-between border-b border-slate-800 pb-3 mb-4">
+                    <div class="flex items-center gap-2">
+                      <i data-lucide="cpu" class="w-5 h-5 text-cyan-400"></i>
+                      <span class="text-xs font-mono font-bold text-white tracking-wider">
+                        MODULE: UART_CONTROLLER_TOP
+                      </span>
+                    </div>
+                    <button id="clkToggleBtn" class="text-[10px] font-mono px-2 py-0.5 rounded bg-cyan-950/80 border border-cyan-500/40 text-cyan-300 hover:bg-cyan-900/80 transition-colors flex items-center gap-1">
+                      <i data-lucide="activity" class="w-3 h-3 text-cyan-400"></i>
+                      <span id="clkStatusText">CLK RUNNING</span>
+                    </button>
+                  </div>
+
+                  <!-- Silicon Core Inner Grid -->
+                  <div class="relative bg-[#050811] rounded-xl p-4 border border-slate-800/80 space-y-4 font-mono">
+                    <div class="flex justify-between text-[10px] text-slate-400">
+                      <span class="text-emerald-400 flex items-center gap-1">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                        sys_clk: 50 MHz
+                      </span>
+                      <span class="text-cyan-400">baud: 115200 bps</span>
+                      <span class="text-purple-400">oversample: 16x</span>
+                    </div>
+
+                    <!-- Core Blocks -->
+                    <div class="grid grid-cols-2 gap-2 text-[11px]">
+                      <div class="p-2.5 rounded-lg bg-slate-900/90 border border-cyan-500/20">
+                        <div class="text-[10px] text-cyan-400 font-semibold mb-1">TX SUBSYSTEM</div>
+                        <div class="text-slate-300">16-Deep FIFO</div>
+                        <div class="text-slate-400 text-[10px]">FSM: IDLE &rarr; TX</div>
+                      </div>
+                      <div class="p-2.5 rounded-lg bg-slate-900/90 border border-purple-500/20">
+                        <div class="text-[10px] text-purple-400 font-semibold mb-1">RX SUBSYSTEM</div>
+                        <div class="text-slate-300">16-Deep FIFO</div>
+                        <div class="text-slate-400 text-[10px]">Parity &amp; Frame Chk</div>
+                      </div>
+                    </div>
+
+                    <!-- Live Serial Bitstream -->
+                    <div class="p-3 rounded-lg bg-[#0a0f24] border border-cyan-500/25">
+                      <div class="flex justify-between items-center text-[10px] mb-2">
+                        <span class="text-cyan-300 font-bold">TXD SHIFT REGISTER (ASCII 'T' - 0x54)</span>
+                        <span class="text-emerald-400 text-[9px] bg-emerald-950/60 px-1.5 py-0.5 rounded border border-emerald-500/30">
+                          VERIFIED: 10/10 PASS
+                        </span>
+                      </div>
+
+                      <div id="bitStreamContainer" class="grid grid-cols-10 gap-1 text-center">
+                        <!-- Populated by JS -->
+                      </div>
+
+                      <div class="mt-2 flex items-center justify-between text-[9px] text-slate-400">
+                        <span>Transmission Bus: TXD Pin #4</span>
+                        <span class="text-cyan-400 font-bold" id="currentStrobe">Strobe: Tick #0</span>
+                      </div>
+                    </div>
+
+                    <!-- Waveform Strip -->
+                    <div class="space-y-1.5 pt-1">
+                      <div class="flex items-center justify-between text-[10px] text-slate-400">
+                        <span>ModelSim Waveform Clock Line</span>
+                        <button onclick="openUartModal()" class="text-cyan-400 hover:text-cyan-300 underline text-[10px]">
+                          Inspect Full Timing
+                        </button>
+                      </div>
+                      <div class="h-9 w-full bg-[#030611] rounded border border-slate-800 p-1 flex items-center gap-1 overflow-hidden">
+                        <div class="text-[9px] text-slate-500 w-8 flex-shrink-0">CLK</div>
+                        <div id="waveClockStrip" class="flex-1 flex items-center space-x-0.5">
+                          <!-- Clock ticks rendered by JS -->
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Button to open UART Deck -->
+                    <button onclick="openUartModal()" class="w-full py-2.5 rounded-lg bg-cyan-950/40 hover:bg-cyan-900/60 border border-cyan-500/30 hover:border-cyan-400 text-cyan-300 text-xs font-mono font-semibold transition-all duration-200 flex items-center justify-center gap-2 group">
+                      <span>Inspect UART Controller Specs &amp; Waveforms</span>
+                      <i data-lucide="arrow-right" class="w-3.5 h-3.5 text-cyan-400 group-hover:translate-x-1 transition-transform"></i>
+                    </button>
+                  </div>
+
+                  <!-- IC Package Rivets -->
+                  <div class="absolute top-2.5 left-2.5 w-2 h-2 rounded-full border border-slate-700 bg-slate-900"></div>
+                  <div class="absolute top-2.5 right-2.5 w-2 h-2 rounded-full border border-slate-700 bg-slate-900"></div>
+                  <div class="absolute bottom-2.5 left-2.5 w-2 h-2 rounded-full border border-slate-700 bg-slate-900"></div>
+                  <div class="absolute bottom-2.5 right-2.5 w-2 h-2 rounded-full border border-slate-700 bg-slate-900"></div>
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- ABOUT ME SECTION -->
+      <section id="about" class="py-20 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          
+          <div class="text-center max-w-3xl mx-auto mb-16">
+            <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-950/60 border border-cyan-500/30 text-xs font-mono text-cyan-300 mb-3">
+              <span class="w-1.5 h-1.5 rounded-full bg-cyan-400"></span>
+              ENGINEERING PROFILE
+            </div>
+            <h2 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+              About <span class="bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">Me</span>
+            </h2>
+            <p className="mt-3 text-slate-400 text-sm sm:text-base">
+              Bridging semiconductor architecture, digital design logic, and software problem-solving.
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-stretch">
+            
+            <!-- Narrative Column -->
+            <div class="lg:col-span-7 flex flex-col justify-between space-y-6">
+              <div class="glass-panel rounded-2xl p-6 sm:p-8 space-y-5 border border-cyan-500/20 shadow-xl">
+                <h3 class="text-xl font-bold text-white flex items-center gap-2">
+                  <span class="w-2.5 h-2.5 rounded-sm bg-cyan-400"></span>
+                  Hardware Design Enthusiast &amp; Problem Solver
+                </h3>
+
+                <!-- Exact user requested content -->
+                <div class="space-y-4 text-slate-300 text-base leading-relaxed">
+                  <p>
+                    I am a final-year Electronics and Communication Engineering student at KLE Institute of Technology, Hubballi. I am interested in VLSI, Digital Design and Embedded Systems.
+                  </p>
+                  <p>
+                    I have practical experience designing and verifying digital systems using Verilog HDL and ModelSim. My major project involves developing a UART Controller with FIFO buffering and error detection.
+                  </p>
+                  <p>
+                    Apart from hardware design, I enjoy Python programming and building small applications. I continuously work on improving my technical knowledge, logical thinking and problem-solving abilities.
+                  </p>
+                </div>
+
+                <!-- Highlight Pillars -->
+                <div class="pt-4 border-t border-slate-800 grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <div class="p-3 rounded-xl bg-slate-900/60 border border-cyan-500/20">
+                    <div class="text-cyan-400 font-mono font-bold text-xs uppercase mb-1">RTL Design</div>
+                    <div class="text-xs text-slate-400">Verilog HDL, modular architecture, and finite state machines.</div>
+                  </div>
+                  <div class="p-3 rounded-xl bg-slate-900/60 border border-purple-500/20">
+                    <div class="text-purple-400 font-mono font-bold text-xs uppercase mb-1">Verification</div>
+                    <div class="text-xs text-slate-400">ModelSim testbenches, timing checks, and waveform analysis.</div>
+                  </div>
+                  <div class="p-3 rounded-xl bg-slate-900/60 border border-emerald-500/20">
+                    <div class="text-emerald-400 font-mono font-bold text-xs uppercase mb-1">Programming</div>
+                    <div class="text-xs text-slate-400">Python scripting, logic implementation, and GUI applications.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Profile Info Card -->
+            <div class="lg:col-span-5 flex flex-col justify-between">
+              <div class="glass-panel rounded-2xl p-6 sm:p-7 border border-cyan-500/20 shadow-xl h-full flex flex-col justify-between">
+                <div>
+                  <div class="flex items-center justify-between border-b border-slate-800 pb-3 mb-5">
+                    <h4 class="text-sm font-mono font-bold text-cyan-300 uppercase tracking-wider">
+                      Profile Data Sheet
+                    </h4>
+                    <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-cyan-950/60 text-cyan-400 border border-cyan-500/30">
+                      ID: TS-ECE-2027
+                    </span>
+                  </div>
+
+                  <div class="grid grid-cols-1 gap-3.5">
+                    
+                    <div class="p-3 rounded-xl bg-slate-900/40 border border-slate-800/80 flex items-start gap-3.5 hover:border-cyan-500/30 transition-colors">
+                      <div class="p-2 rounded-lg bg-slate-800/80 flex-shrink-0 mt-0.5 text-cyan-400">
+                        <i data-lucide="graduation-cap" class="w-5 h-5"></i>
+                      </div>
+                      <div class="min-w-0">
+                        <div class="text-[11px] font-mono uppercase tracking-wider text-slate-400">Degree</div>
+                        <div class="text-sm font-semibold text-white truncate">Bachelor of Engineering (B.E.)</div>
+                        <div class="text-xs text-slate-400">Electronics &amp; Communication Engineering</div>
+                      </div>
+                    </div>
+
+                    <div class="p-3 rounded-xl bg-slate-900/40 border border-slate-800/80 flex items-start gap-3.5 hover:border-cyan-500/30 transition-colors">
+                      <div class="p-2 rounded-lg bg-slate-800/80 flex-shrink-0 mt-0.5 text-purple-400">
+                        <i data-lucide="cpu" class="w-5 h-5"></i>
+                      </div>
+                      <div class="min-w-0">
+                        <div class="text-[11px] font-mono uppercase tracking-wider text-slate-400">Institution</div>
+                        <div class="text-sm font-semibold text-white truncate">KLE Institute of Technology</div>
+                        <div class="text-xs text-slate-400">Hubballi, Karnataka (2023–2027)</div>
+                      </div>
+                    </div>
+
+                    <div class="p-3 rounded-xl bg-slate-900/40 border border-slate-800/80 flex items-start gap-3.5 hover:border-cyan-500/30 transition-colors">
+                      <div class="p-2 rounded-lg bg-slate-800/80 flex-shrink-0 mt-0.5 text-emerald-400">
+                        <i data-lucide="award" class="w-5 h-5"></i>
+                      </div>
+                      <div class="min-w-0">
+                        <div class="text-[11px] font-mono uppercase tracking-wider text-slate-400">Academic Score</div>
+                        <div class="text-sm font-semibold text-white truncate">CGPA: 7.8 / 10</div>
+                        <div class="text-xs text-slate-400">Consistent technical foundation</div>
+                      </div>
+                    </div>
+
+                    <div class="p-3 rounded-xl bg-slate-900/40 border border-slate-800/80 flex items-start gap-3.5 hover:border-cyan-500/30 transition-colors">
+                      <div class="p-2 rounded-lg bg-slate-800/80 flex-shrink-0 mt-0.5 text-rose-400">
+                        <i data-lucide="map-pin" class="w-5 h-5"></i>
+                      </div>
+                      <div class="min-w-0">
+                        <div class="text-[11px] font-mono uppercase tracking-wider text-slate-400">Location</div>
+                        <div class="text-sm font-semibold text-white truncate">Vijayapura, Karnataka</div>
+                        <div class="text-xs text-slate-400">Open to relocation &amp; remote</div>
+                      </div>
+                    </div>
+
+                    <div class="p-3 rounded-xl bg-slate-900/40 border border-slate-800/80 flex items-start gap-3.5 hover:border-cyan-500/30 transition-colors">
+                      <div class="p-2 rounded-lg bg-slate-800/80 flex-shrink-0 mt-0.5 text-sky-400">
+                        <i data-lucide="compass" class="w-5 h-5"></i>
+                      </div>
+                      <div class="min-w-0">
+                        <div class="text-[11px] font-mono uppercase tracking-wider text-slate-400">Career Goal</div>
+                        <div class="text-sm font-semibold text-white truncate">VLSI / Digital Design Engineer</div>
+                        <div class="text-xs text-slate-400">Entry-level hardware design &amp; verification</div>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+
+                <div class="mt-5 pt-4 border-t border-slate-800 flex items-center justify-between text-xs text-slate-400">
+                  <span class="flex items-center gap-1.5 text-emerald-400 font-mono">
+                    <i data-lucide="check-circle-2" class="w-4 h-4"></i>
+                    Credentials Verified
+                  </span>
+                  <span class="font-mono text-slate-500">KLE Tech &bull; VTU Affiliated</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- TECHNICAL SKILLS SECTION -->
+      <section id="skills" class="py-20 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          
+          <div class="text-center max-w-3xl mx-auto mb-16">
+            <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-950/60 border border-cyan-500/30 text-xs font-mono text-cyan-300 mb-3">
+              <span class="w-1.5 h-1.5 rounded-full bg-cyan-400"></span>
+              TECHNICAL COMPETENCY
+            </div>
+            <h2 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+              Technical <span class="bg-gradient-to-r from-cyan-400 via-sky-300 to-purple-400 bg-clip-text text-transparent">Skills</span>
+            </h2>
+            <p className="mt-3 text-slate-400 text-sm sm:text-base">
+              Verified competencies in VLSI digital design, hardware description, software programming, and engineering tools.
+            </p>
+          </div>
+
+          <!-- Cards Grid -->
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            
+            <!-- VLSI and Digital Design -->
+            <div class="glass-panel rounded-2xl p-6 border border-cyan-500/30 hover:border-cyan-400 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 flex flex-col justify-between">
+              <div>
+                <div class="flex items-center gap-3 mb-3">
+                  <div class="p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-cyan-400">
+                    <i data-lucide="cpu" class="w-5 h-5"></i>
+                  </div>
+                  <div>
+                    <h3 class="font-bold text-white text-base">VLSI and Digital Design</h3>
+                    <div class="text-[10px] font-mono text-slate-400">5 core competencies</div>
+                  </div>
+                </div>
+                <p class="text-xs text-slate-400 mb-5 leading-relaxed">
+                  Hardware description, digital synthesis concepts, memory buffer architecture, and simulation verification.
+                </p>
+                <div class="space-y-2.5">
+                  <div class="p-2.5 rounded-xl bg-slate-900/60 border border-slate-800/80">
+                    <span class="font-mono text-xs font-semibold text-white flex items-center gap-1.5 mb-0.5">
+                      <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-cyan-400"></i>
+                      Verilog HDL
+                    </span>
+                    <p class="text-[11px] text-slate-400 pl-5">RTL modeling, Finite State Machines (FSM), testbenches</p>
+                  </div>
+                  <div class="p-2.5 rounded-xl bg-slate-900/60 border border-slate-800/80">
+                    <span class="font-mono text-xs font-semibold text-white flex items-center gap-1.5 mb-0.5">
+                      <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-cyan-400"></i>
+                      UART
+                    </span>
+                    <p class="text-[11px] text-slate-400 pl-5">Full-duplex serial protocol, baud generator, oversampling</p>
+                  </div>
+                  <div class="p-2.5 rounded-xl bg-slate-900/60 border border-slate-800/80">
+                    <span class="font-mono text-xs font-semibold text-white flex items-center gap-1.5 mb-0.5">
+                      <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-cyan-400"></i>
+                      FIFO Design
+                    </span>
+                    <p class="text-[11px] text-slate-400 pl-5">Circular pointers, 16-deep buffering, full/empty flags</p>
+                  </div>
+                  <div class="p-2.5 rounded-xl bg-slate-900/60 border border-slate-800/80">
+                    <span class="font-mono text-xs font-semibold text-white flex items-center gap-1.5 mb-0.5">
+                      <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-cyan-400"></i>
+                      Digital Circuits
+                    </span>
+                    <p class="text-[11px] text-slate-400 pl-5">Combinational/sequential logic, registers, timing analysis</p>
+                  </div>
+                  <div class="p-2.5 rounded-xl bg-slate-900/60 border border-slate-800/80">
+                    <span class="font-mono text-xs font-semibold text-white flex items-center gap-1.5 mb-0.5">
+                      <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-cyan-400"></i>
+                      ModelSim
+                    </span>
+                    <p class="text-[11px] text-slate-400 pl-5">Behavioral simulation, waveform inspection, regression testing</p>
+                  </div>
+                </div>
+              </div>
+              <div class="mt-5 pt-3 border-t border-slate-800/80 flex items-center justify-between text-[10px] font-mono text-slate-500">
+                <span>SYSTEM VERIFIED</span>
+                <span class="text-cyan-400">ACADEMIC &amp; PROJECT USE</span>
+              </div>
+            </div>
+
+            <!-- Programming -->
+            <div class="glass-panel rounded-2xl p-6 border border-blue-500/30 hover:border-blue-400 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 flex flex-col justify-between">
+              <div>
+                <div class="flex items-center gap-3 mb-3">
+                  <div class="p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-blue-400">
+                    <i data-lucide="code-2" class="w-5 h-5"></i>
+                  </div>
+                  <div>
+                    <h3 class="font-bold text-white text-base">Programming</h3>
+                    <div class="text-[10px] font-mono text-slate-400">Core software fundamentals</div>
+                  </div>
+                </div>
+                <p class="text-xs text-slate-400 mb-5 leading-relaxed">
+                  Algorithmic thinking, core scripting, numerical processing, and software development fundamentals.
+                </p>
+                <div class="space-y-2.5">
+                  <div class="p-2.5 rounded-xl bg-slate-900/60 border border-slate-800/80">
+                    <span class="font-mono text-xs font-semibold text-white flex items-center gap-1.5 mb-0.5">
+                      <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-blue-400"></i>
+                      Python
+                    </span>
+                    <p class="text-[11px] text-slate-400 pl-5">Object-oriented scripting, algorithmic logic, data processing</p>
+                  </div>
+                  <div class="p-2.5 rounded-xl bg-slate-900/60 border border-slate-800/80">
+                    <span class="font-mono text-xs font-semibold text-white flex items-center gap-1.5 mb-0.5">
+                      <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-blue-400"></i>
+                      NumPy
+                    </span>
+                    <p class="text-[11px] text-slate-400 pl-5">Numerical arrays, vector calculations, matrix operations</p>
+                  </div>
+                </div>
+              </div>
+              <div class="mt-5 pt-3 border-t border-slate-800/80 flex items-center justify-between text-[10px] font-mono text-slate-500">
+                <span>SYSTEM VERIFIED</span>
+                <span class="text-blue-400">SCRIPTING &amp; APPS</span>
+              </div>
+            </div>
+
+            <!-- Embedded Systems -->
+            <div class="glass-panel rounded-2xl p-6 border border-purple-500/30 hover:border-purple-400 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 flex flex-col justify-between">
+              <div>
+                <div class="flex items-center gap-3 mb-3">
+                  <div class="p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-purple-400">
+                    <i data-lucide="layers" class="w-5 h-5"></i>
+                  </div>
+                  <div>
+                    <h3 class="font-bold text-white text-base">Embedded Systems</h3>
+                    <div class="text-[10px] font-mono text-slate-400">Microcontroller prototyping</div>
+                  </div>
+                </div>
+                <p class="text-xs text-slate-400 mb-5 leading-relaxed">
+                  Microcontroller architecture, peripheral interfacing, GPIO control, and sensor integration.
+                </p>
+                <div class="space-y-2.5">
+                  <div class="p-2.5 rounded-xl bg-slate-900/60 border border-slate-800/80">
+                    <span class="font-mono text-xs font-semibold text-white flex items-center gap-1.5 mb-0.5">
+                      <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-purple-400"></i>
+                      Arduino
+                    </span>
+                    <p class="text-[11px] text-slate-400 pl-5">Microcontroller prototyping, hardware interfacing, C/C++ firmware</p>
+                  </div>
+                  <div class="p-2.5 rounded-xl bg-slate-900/60 border border-slate-800/80">
+                    <span class="font-mono text-xs font-semibold text-white flex items-center gap-1.5 mb-0.5">
+                      <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-purple-400"></i>
+                      ESP32
+                    </span>
+                    <p class="text-[11px] text-slate-400 pl-5">32-bit dual-core microcontroller, IoT interfacing, GPIO buses</p>
+                  </div>
+                </div>
+              </div>
+              <div class="mt-5 pt-3 border-t border-slate-800/80 flex items-center justify-between text-[10px] font-mono text-slate-500">
+                <span>SYSTEM VERIFIED</span>
+                <span class="text-purple-400">HARDWARE INTERFACING</span>
+              </div>
+            </div>
+
+            <!-- Development Tools -->
+            <div class="glass-panel rounded-2xl p-6 border border-emerald-500/30 hover:border-emerald-400 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 flex flex-col justify-between">
+              <div>
+                <div class="flex items-center gap-3 mb-3">
+                  <div class="p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-emerald-400">
+                    <i data-lucide="wrench" class="w-5 h-5"></i>
+                  </div>
+                  <div>
+                    <h3 class="font-bold text-white text-base">Development Tools</h3>
+                    <div class="text-[10px] font-mono text-slate-400">Engineering productivity</div>
+                  </div>
+                </div>
+                <p class="text-xs text-slate-400 mb-5 leading-relaxed">
+                  Engineering workflows, source control, modular development, and debugging utilities.
+                </p>
+                <div class="space-y-2.5">
+                  <div class="p-2.5 rounded-xl bg-slate-900/60 border border-slate-800/80">
+                    <span class="font-mono text-xs font-semibold text-white flex items-center gap-1.5 mb-0.5">
+                      <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-emerald-400"></i>
+                      VS Code
+                    </span>
+                    <p class="text-[11px] text-slate-400 pl-5">Modern code editor, extensions for Verilog HDL &amp; Python</p>
+                  </div>
+                  <div class="p-2.5 rounded-xl bg-slate-900/60 border border-slate-800/80">
+                    <span class="font-mono text-xs font-semibold text-white flex items-center gap-1.5 mb-0.5">
+                      <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-emerald-400"></i>
+                      GitHub
+                    </span>
+                    <p class="text-[11px] text-slate-400 pl-5">Git version control, repositories, collaboration workflows</p>
+                  </div>
+                </div>
+              </div>
+              <div class="mt-5 pt-3 border-t border-slate-800/80 flex items-center justify-between text-[10px] font-mono text-slate-500">
+                <span>SYSTEM VERIFIED</span>
+                <span class="text-emerald-400">VERSION CONTROL</span>
+              </div>
+            </div>
+
+            <!-- Soft Skills -->
+            <div class="glass-panel rounded-2xl p-6 border border-amber-500/30 hover:border-amber-400 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 flex flex-col justify-between lg:col-span-2">
+              <div>
+                <div class="flex items-center gap-3 mb-3">
+                  <div class="p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-amber-400">
+                    <i data-lucide="users" class="w-5 h-5"></i>
+                  </div>
+                  <div>
+                    <h3 class="font-bold text-white text-base">Soft Skills</h3>
+                    <div class="text-[10px] font-mono text-slate-400">Engineering methodology &amp; collaboration</div>
+                  </div>
+                </div>
+                <p class="text-xs text-slate-400 mb-5 leading-relaxed">
+                  Analytical mindset, structured engineering methodology, root-cause troubleshooting, and team synergy.
+                </p>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                  <div class="p-2.5 rounded-xl bg-slate-900/60 border border-slate-800/80">
+                    <span class="font-mono text-xs font-semibold text-white flex items-center gap-1.5 mb-0.5">
+                      <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-amber-400"></i>
+                      Problem Solving
+                    </span>
+                    <p class="text-[11px] text-slate-400 pl-5">Root-cause analysis &amp; timing debugging</p>
+                  </div>
+                  <div class="p-2.5 rounded-xl bg-slate-900/60 border border-slate-800/80">
+                    <span class="font-mono text-xs font-semibold text-white flex items-center gap-1.5 mb-0.5">
+                      <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-amber-400"></i>
+                      Logical Thinking
+                    </span>
+                    <p class="text-[11px] text-slate-400 pl-5">State machine design &amp; edge-case handling</p>
+                  </div>
+                  <div class="p-2.5 rounded-xl bg-slate-900/60 border border-slate-800/80">
+                    <span class="font-mono text-xs font-semibold text-white flex items-center gap-1.5 mb-0.5">
+                      <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-amber-400"></i>
+                      Teamwork
+                    </span>
+                    <p class="text-[11px] text-slate-400 pl-5">Collaborative execution &amp; peer review</p>
+                  </div>
+                </div>
+              </div>
+              <div class="mt-5 pt-3 border-t border-slate-800/80 flex items-center justify-between text-[10px] font-mono text-slate-500">
+                <span>SYSTEM VERIFIED</span>
+                <span class="text-amber-400">ENGINEERING PROFESSIONALISM</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- FEATURED PROJECTS SECTION -->
+      <section id="projects" class="py-20 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          
+          <div class="text-center max-w-3xl mx-auto mb-16">
+            <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-950/60 border border-cyan-500/30 text-xs font-mono text-cyan-300 mb-3">
+              <span class="w-1.5 h-1.5 rounded-full bg-cyan-400"></span>
+              PORTFOLIO HIGHLIGHTS
+            </div>
+            <h2 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+              Featured <span class="bg-gradient-to-r from-cyan-400 via-sky-300 to-purple-400 bg-clip-text text-transparent">Projects</span>
+            </h2>
+            <p className="mt-3 text-slate-400 text-sm sm:text-base">
+              Hardware RTL design, simulation verification, and Python applications with clean architectures.
+            </p>
+          </div>
+
+          <!-- FLAGSHIP PROJECT: UART Controller with FIFO -->
+          <div class="mb-14">
+            <div class="relative rounded-3xl bg-gradient-to-b from-[#0e162e] to-[#070b16] border border-cyan-500/40 p-6 sm:p-10 shadow-[0_0_50px_rgba(0,240,255,0.15)] overflow-hidden">
+              <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-cyan-500 via-sky-400 to-purple-500"></div>
+              
+              <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                
+                <!-- Info Column -->
+                <div class="lg:col-span-7 space-y-5">
+                  <div class="flex flex-wrap items-center gap-2">
+                    <span class="px-3 py-1 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 text-xs font-mono font-bold uppercase tracking-wider">
+                      FLAGSHIP HARDWARE PROJECT
+                    </span>
+                    <span class="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-xs font-mono font-bold flex items-center gap-1">
+                      <i data-lucide="check-circle-2" class="w-3.5 h-3.5"></i>
+                      10/10 ModelSim Cases Passed
+                    </span>
+                  </div>
+
+                  <div>
+                    <h3 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+                      UART Controller with FIFO and Error Detection
+                    </h3>
+                    <div class="flex flex-wrap items-center gap-2 mt-2">
+                      <span class="text-xs font-mono font-semibold px-2.5 py-1 rounded-md bg-slate-900 text-cyan-400 border border-cyan-500/30">
+                        Verilog HDL
+                      </span>
+                      <span class="text-xs font-mono font-semibold px-2.5 py-1 rounded-md bg-slate-900 text-purple-400 border border-purple-500/30">
+                        ModelSim
+                      </span>
+                      <span class="text-xs font-mono font-semibold px-2.5 py-1 rounded-md bg-slate-900 text-sky-400 border border-sky-500/30">
+                        16-Deep FIFO
+                      </span>
+                      <span class="text-xs font-mono font-semibold px-2.5 py-1 rounded-md bg-slate-900 text-slate-300 border border-slate-700">
+                        FSM Architecture
+                      </span>
+                    </div>
+                  </div>
+
+                  <!-- Exact bullets from requirements -->
+                  <div class="space-y-2.5 text-sm text-slate-300 leading-relaxed">
+                    <div class="flex items-start gap-2.5">
+                      <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 mt-2 flex-shrink-0"></span>
+                      <span>Designed and verified a full UART controller using <strong>Verilog HDL</strong>.</span>
+                    </div>
+                    <div class="flex items-start gap-2.5">
+                      <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 mt-2 flex-shrink-0"></span>
+                      <span>Implemented transmitter, receiver, and dedicated baud-rate generator.</span>
+                    </div>
+                    <div class="flex items-start gap-2.5">
+                      <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 mt-2 flex-shrink-0"></span>
+                      <span>Integrated <strong>16-deep TX and RX FIFO buffers</strong> to decouple processing rates and prevent overflow.</span>
+                    </div>
+                    <div class="flex items-start gap-2.5">
+                      <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 mt-2 flex-shrink-0"></span>
+                      <span>Configured <strong>115200 baud rate</strong> with <strong>50 MHz system clock</strong> and <strong>16x oversampling</strong> for precision bit sync.</span>
+                    </div>
+                    <div class="flex items-start gap-2.5">
+                      <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 mt-2 flex-shrink-0"></span>
+                      <span>Implemented robust <strong>parity error</strong> and <strong>framing error detection</strong> mechanisms.</span>
+                    </div>
+                    <div class="flex items-start gap-2.5">
+                      <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 mt-2 flex-shrink-0"></span>
+                      <span>Verified the design using <strong>10 ModelSim test cases with zero failures</strong>.</span>
+                    </div>
+                    <div class="flex items-start gap-2.5">
+                      <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 mt-2 flex-shrink-0"></span>
+                      <span>Analysed simulation waveforms to verify timing constraints, setup/hold margins, and data integrity.</span>
+                    </div>
+                  </div>
+
+                  <!-- Project Actions -->
+                  <div class="pt-3 flex flex-wrap items-center gap-4">
+                    <button onclick="openUartModal()" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-xs sm:text-sm bg-cyan-500 hover:bg-cyan-400 text-slate-950 transition-all duration-200 shadow-[0_0_20px_rgba(0,240,255,0.3)] hover:shadow-[0_0_30px_rgba(0,240,255,0.5)]">
+                      <i data-lucide="activity" class="w-4 h-4"></i>
+                      Open Architecture &amp; Waveforms
+                    </button>
+
+                    <button onclick="openResumeModal()" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl font-mono text-xs text-cyan-300 bg-slate-900/80 hover:bg-cyan-950/50 border border-cyan-500/40 hover:border-cyan-400 transition-colors">
+                      <i data-lucide="file-text" class="w-4 h-4 text-cyan-400"></i>
+                      Resume Project Details
+                    </button>
+
+                    <span class="text-xs font-mono text-slate-400">
+                      *Verified in ModelSim Testbench
+                    </span>
+                  </div>
+                </div>
+
+                <!-- Diagram Preview -->
+                <div class="lg:col-span-5">
+                  <div onclick="openUartModal()" class="group relative cursor-pointer rounded-2xl bg-[#070b16] border border-cyan-500/30 p-3 hover:border-cyan-400 transition-all duration-300 shadow-2xl hover:shadow-[0_0_30px_rgba(0,240,255,0.2)]">
+                    <img src="public/uart-block-diagram.svg" alt="UART Architecture Diagram" class="w-full h-auto rounded-xl object-cover transform group-hover:scale-[1.01] transition-transform duration-300" />
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent rounded-2xl flex items-end p-4">
+                      <span class="text-xs font-mono text-cyan-300 flex items-center gap-1.5 group-hover:text-white transition-colors">
+                        <i data-lucide="play" class="w-3.5 h-3.5 text-cyan-400"></i>
+                        Click to explore block diagram &amp; waveforms &rarr;
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+          <!-- PROJECTS 2, 3, 4: Python & Tkinter -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            
+            <!-- PROJECT 2: Weather App -->
+            <div class="glass-panel rounded-2xl p-6 border border-sky-500/20 hover:border-sky-400/50 transition-all duration-300 hover:-translate-y-1 flex flex-col justify-between">
+              <div>
+                <div class="flex items-center justify-between mb-4">
+                  <div class="p-3 rounded-xl bg-sky-950/60 border border-sky-500/30 text-sky-400">
+                    <i data-lucide="cloud-sun" class="w-6 h-6"></i>
+                  </div>
+                  <span class="px-2.5 py-1 rounded bg-slate-900 border border-slate-800 text-[11px] font-mono text-sky-300">
+                    Python
+                  </span>
+                </div>
+
+                <h4 class="text-xl font-bold text-white mb-2">Weather App</h4>
+                <p class="text-xs sm:text-sm text-slate-300 leading-relaxed mb-4">
+                  Developed a Python application that displays the current weather of a location selected by the user.
+                </p>
+
+                <div class="space-y-1.5 text-xs text-slate-400 mb-6 font-mono">
+                  <div>&bull; User location selection</div>
+                  <div>&bull; Real-time weather data parsing</div>
+                  <div>&bull; Clear metrics display</div>
+                </div>
+              </div>
+
+              <div class="pt-4 border-t border-slate-800/80 flex items-center justify-between">
+                <a href="https://github.com/teju-developer/wether-app" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-xs font-mono text-sky-400 hover:text-sky-300 font-semibold">
+                  <i data-lucide="github" class="w-4 h-4"></i>
+                  <span>View on GitHub</span>
+                  <i data-lucide="external-link" class="w-3 h-3"></i>
+                </a>
+                <span class="text-[10px] font-mono text-slate-500">teju-developer</span>
+              </div>
+            </div>
+
+            <!-- PROJECT 3: Calculator -->
+            <div class="glass-panel rounded-2xl p-6 border border-cyan-500/20 hover:border-cyan-400/50 transition-all duration-300 hover:-translate-y-1 flex flex-col justify-between">
+              <div>
+                <div class="flex items-center justify-between mb-4">
+                  <div class="p-3 rounded-xl bg-cyan-950/60 border border-cyan-500/30 text-cyan-400">
+                    <i data-lucide="calculator" class="w-6 h-6"></i>
+                  </div>
+                  <div class="flex gap-1.5">
+                    <span class="px-2 py-0.5 rounded bg-slate-900 border border-slate-800 text-[10px] font-mono text-cyan-300">Python</span>
+                    <span class="px-2 py-0.5 rounded bg-slate-900 border border-slate-800 text-[10px] font-mono text-cyan-300">Tkinter</span>
+                  </div>
+                </div>
+
+                <h4 class="text-xl font-bold text-white mb-2">Calculator</h4>
+                <p class="text-xs sm:text-sm text-slate-300 leading-relaxed mb-4">
+                  Developed a GUI-based calculator using Tkinter with buttons and a display for arithmetic operations.
+                </p>
+
+                <div class="space-y-1.5 text-xs text-slate-400 mb-6 font-mono">
+                  <div>&bull; Arithmetic calculation engine</div>
+                  <div>&bull; Interactive button grid interface</div>
+                  <div>&bull; Real-time numeric display</div>
+                </div>
+              </div>
+
+              <div class="pt-4 border-t border-slate-800/80 flex items-center justify-between">
+                <a href="https://github.com/teju-developer/calculater.py" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-xs font-mono text-cyan-400 hover:text-cyan-300 font-semibold">
+                  <i data-lucide="github" class="w-4 h-4"></i>
+                  <span>View on GitHub</span>
+                  <i data-lucide="external-link" class="w-3 h-3"></i>
+                </a>
+                <button onclick="openCalcModal()" class="px-2.5 py-1 rounded bg-cyan-950/80 hover:bg-cyan-900 border border-cyan-500/30 text-[11px] font-mono text-cyan-300 transition-colors">
+                  Launch Demo
+                </button>
+              </div>
+            </div>
+
+            <!-- PROJECT 4: Tkinter Models -->
+            <div class="glass-panel rounded-2xl p-6 border border-purple-500/20 hover:border-purple-400/50 transition-all duration-300 hover:-translate-y-1 flex flex-col justify-between">
+              <div>
+                <div class="flex items-center justify-between mb-4">
+                  <div class="p-3 rounded-xl bg-purple-950/60 border border-purple-500/30 text-purple-400">
+                    <i data-lucide="layers" class="w-6 h-6"></i>
+                  </div>
+                  <div class="flex gap-1.5">
+                    <span class="px-2 py-0.5 rounded bg-slate-900 border border-slate-800 text-[10px] font-mono text-purple-300">Python</span>
+                    <span class="px-2 py-0.5 rounded bg-slate-900 border border-slate-800 text-[10px] font-mono text-purple-300">Tkinter</span>
+                  </div>
+                </div>
+
+                <h4 class="text-xl font-bold text-white mb-2">Tkinter Models</h4>
+                <p class="text-xs sm:text-sm text-slate-300 leading-relaxed mb-4">
+                  Created small GUI applications using Tkinter built-in widgets and functions. Applied GUI development and event-handling concepts.
+                </p>
+
+                <div class="space-y-1.5 text-xs text-slate-400 mb-6 font-mono">
+                  <div>&bull; Built-in widget mastery</div>
+                  <div>&bull; Event-driven handler pipelines</div>
+                  <div>&bull; Interactive desktop GUI models</div>
+                </div>
+              </div>
+
+              <div class="pt-4 border-t border-slate-800/80 flex items-center justify-between">
+                <a href="https://github.com/teju-developer/tkinter" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-xs font-mono text-purple-400 hover:text-purple-300 font-semibold">
+                  <i data-lucide="github" class="w-4 h-4"></i>
+                  <span>View on GitHub</span>
+                  <i data-lucide="external-link" class="w-3 h-3"></i>
+                </a>
+                <span class="text-[10px] font-mono text-slate-500">teju-developer</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- EDUCATION SECTION -->
+      <section id="education" class="py-20 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          
+          <div class="text-center max-w-3xl mx-auto mb-16">
+            <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-950/60 border border-cyan-500/30 text-xs font-mono text-cyan-300 mb-3">
+              <span class="w-1.5 h-1.5 rounded-full bg-cyan-400"></span>
+              ACADEMIC BACKGROUND
+            </div>
+            <h2 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+              Education <span class="bg-gradient-to-r from-cyan-400 via-sky-300 to-purple-400 bg-clip-text text-transparent">Timeline</span>
+            </h2>
+            <p className="mt-3 text-slate-400 text-sm sm:text-base">
+              Academic qualifications demonstrating a consistent foundation in electronics, engineering, and logic.
+            </p>
+          </div>
+
+          <!-- Timeline -->
+          <div class="relative max-w-4xl mx-auto">
+            <div class="absolute top-4 bottom-4 left-4 sm:left-1/2 -ml-0.5 w-0.5 bg-gradient-to-b from-cyan-500 via-purple-500 to-emerald-500/40"></div>
+
+            <div class="space-y-12">
+              
+              <!-- 1: B.E. ECE -->
+              <div class="relative flex flex-col sm:flex-row items-start sm:flex-row-reverse">
+                <div class="absolute left-4 sm:left-1/2 -ml-3 sm:-ml-3.5 w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-[#060913] border-2 border-cyan-400 flex items-center justify-center shadow-[0_0_15px_rgba(0,240,255,0.6)] z-10 mt-1.5">
+                  <span class="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
+                </div>
+                <div class="hidden sm:block sm:w-1/2"></div>
+                <div class="ml-12 sm:ml-0 sm:w-1/2 sm:px-6">
+                  <div class="glass-panel rounded-2xl p-6 border border-cyan-500/30 hover:border-cyan-400/50 transition-all duration-300 shadow-xl hover:-translate-y-1">
+                    <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                      <span class="px-2.5 py-0.5 rounded text-[11px] font-mono font-bold border bg-cyan-950/80 text-cyan-300 border-cyan-500/40">
+                        CGPA: 7.8 / 10
+                      </span>
+                      <span class="text-xs font-mono text-cyan-400 flex items-center gap-1">
+                        <i data-lucide="calendar" class="w-3.5 h-3.5"></i>
+                        2023–2027
+                      </span>
+                    </div>
+                    <h3 class="text-lg font-bold text-white tracking-tight">
+                      Bachelor of Engineering (B.E.)
+                    </h3>
+                    <div class="text-sm font-semibold text-cyan-300">
+                      Electronics and Communication Engineering
+                    </div>
+                    <div class="text-xs text-slate-400 mt-1 mb-3 flex flex-wrap items-center gap-x-3">
+                      <span class="flex items-center gap-1">
+                        <i data-lucide="graduation-cap" class="w-3.5 h-3.5 text-slate-500"></i>
+                        KLE Institute of Technology
+                      </span>
+                      <span class="flex items-center gap-1">
+                        <i data-lucide="map-pin" class="w-3.5 h-3.5 text-slate-500"></i>
+                        Hubballi, Karnataka
+                      </span>
+                    </div>
+                    <div class="space-y-1.5 text-xs text-slate-300 pt-3 border-t border-slate-800">
+                      <div class="flex items-start gap-2">
+                        <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 mt-1.5 flex-shrink-0"></span>
+                        <span>Core coursework: VLSI Design, Digital System Design, Microcontrollers, Verilog HDL, Signals &amp; Systems.</span>
+                      </div>
+                      <div class="flex items-start gap-2">
+                        <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 mt-1.5 flex-shrink-0"></span>
+                        <span>Hands-on laboratory experience with ModelSim waveform simulation, FPGA concepts, and embedded hardware.</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 2: PUC -->
+              <div class="relative flex flex-col sm:flex-row items-start">
+                <div class="absolute left-4 sm:left-1/2 -ml-3 sm:-ml-3.5 w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-[#060913] border-2 border-purple-400 flex items-center justify-center shadow-[0_0_15px_rgba(168,85,247,0.6)] z-10 mt-1.5">
+                  <span class="w-2 h-2 rounded-full bg-purple-400"></span>
+                </div>
+                <div class="hidden sm:block sm:w-1/2"></div>
+                <div class="ml-12 sm:ml-0 sm:w-1/2 sm:px-6">
+                  <div class="glass-panel rounded-2xl p-6 border border-purple-500/30 hover:border-purple-400/50 transition-all duration-300 shadow-xl hover:-translate-y-1">
+                    <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                      <span class="px-2.5 py-0.5 rounded text-[11px] font-mono font-bold border bg-purple-950/80 text-purple-300 border-purple-500/40">
+                        Score: 88.0%
+                      </span>
+                      <span class="text-xs font-mono text-purple-400 flex items-center gap-1">
+                        <i data-lucide="calendar" class="w-3.5 h-3.5"></i>
+                        2021–2023
+                      </span>
+                    </div>
+                    <h3 class="text-lg font-bold text-white tracking-tight">
+                      Pre-University Course (PUC)
+                    </h3>
+                    <div class="text-sm font-semibold text-purple-300">
+                      Science (PCMB Stream)
+                    </div>
+                    <div class="text-xs text-slate-400 mt-1 mb-3 flex flex-wrap items-center gap-x-3">
+                      <span class="flex items-center gap-1">
+                        <i data-lucide="graduation-cap" class="w-3.5 h-3.5 text-slate-500"></i>
+                        Sanikethan College
+                      </span>
+                      <span class="flex items-center gap-1">
+                        <i data-lucide="map-pin" class="w-3.5 h-3.5 text-slate-500"></i>
+                        Mudhol, Karnataka
+                      </span>
+                    </div>
+                    <div class="space-y-1.5 text-xs text-slate-300 pt-3 border-t border-slate-800">
+                      <div class="flex items-start gap-2">
+                        <span class="w-1.5 h-1.5 rounded-full bg-purple-400 mt-1.5 flex-shrink-0"></span>
+                        <span>Strong academic grounding in Physics, Mathematics, Chemistry, and Analytical Thinking.</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 3: SSLC -->
+              <div class="relative flex flex-col sm:flex-row items-start sm:flex-row-reverse">
+                <div class="absolute left-4 sm:left-1/2 -ml-3 sm:-ml-3.5 w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-[#060913] border-2 border-emerald-400 flex items-center justify-center shadow-[0_0_15px_rgba(16,185,129,0.6)] z-10 mt-1.5">
+                  <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+                </div>
+                <div class="hidden sm:block sm:w-1/2"></div>
+                <div class="ml-12 sm:ml-0 sm:w-1/2 sm:px-6">
+                  <div class="glass-panel rounded-2xl p-6 border border-emerald-500/30 hover:border-emerald-400/50 transition-all duration-300 shadow-xl hover:-translate-y-1">
+                    <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                      <span class="px-2.5 py-0.5 rounded text-[11px] font-mono font-bold border bg-emerald-950/80 text-emerald-300 border-emerald-500/40">
+                        Score: 87.2%
+                      </span>
+                      <span class="text-xs font-mono text-emerald-400 flex items-center gap-1">
+                        <i data-lucide="calendar" class="w-3.5 h-3.5"></i>
+                        2020–2021
+                      </span>
+                    </div>
+                    <h3 class="text-lg font-bold text-white tracking-tight">
+                      Secondary School Leaving Certificate (SSLC)
+                    </h3>
+                    <div class="text-sm font-semibold text-emerald-300">
+                      High School Education
+                    </div>
+                    <div class="text-xs text-slate-400 mt-1 mb-3 flex flex-wrap items-center gap-x-3">
+                      <span class="flex items-center gap-1">
+                        <i data-lucide="graduation-cap" class="w-3.5 h-3.5 text-slate-500"></i>
+                        MDRS, Nelithirtha
+                      </span>
+                      <span class="flex items-center gap-1">
+                        <i data-lucide="map-pin" class="w-3.5 h-3.5 text-slate-500"></i>
+                        Mangalore, Karnataka
+                      </span>
+                    </div>
+                    <div class="space-y-1.5 text-xs text-slate-300 pt-3 border-t border-slate-800">
+                      <div class="flex items-start gap-2">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 mt-1.5 flex-shrink-0"></span>
+                        <span>Excellence in Mathematics, Science, and Logical Problem Solving.</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CERTIFICATIONS & ACHIEVEMENTS SECTION -->
+      <section id="certifications" class="py-20 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          
+          <div class="text-center max-w-3xl mx-auto mb-16">
+            <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-950/60 border border-cyan-500/30 text-xs font-mono text-cyan-300 mb-3">
+              <span class="w-1.5 h-1.5 rounded-full bg-cyan-400"></span>
+              VERIFIED CREDENTIALS
+            </div>
+            <h2 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+              Certifications &amp; <span class="bg-gradient-to-r from-cyan-400 via-sky-300 to-purple-400 bg-clip-text text-transparent">Achievements</span>
+            </h2>
+            <p className="mt-3 text-slate-400 text-sm sm:text-base">
+              Verified academic certifications in digital electronics and programming from premier institutions.
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            
+            <!-- Digital Circuits -->
+            <div class="glass-panel rounded-2xl p-6 sm:p-7 border border-cyan-500/40 bg-[#0d162e]/70 shadow-[0_0_30px_rgba(0,240,255,0.12)] transition-all duration-300 hover:-translate-y-1">
+              <div class="flex items-start justify-between gap-3 mb-4">
+                <div class="flex items-center gap-3">
+                  <div class="p-3 rounded-xl bg-cyan-950/90 border border-cyan-500/50 text-cyan-400">
+                    <i data-lucide="award" class="w-6 h-6"></i>
+                  </div>
+                  <div>
+                    <h3 class="font-bold text-white text-lg">Digital Circuits</h3>
+                    <div class="text-xs font-mono text-cyan-300">NPTEL, IIT Kharagpur</div>
+                  </div>
+                </div>
+                <div class="text-right flex flex-col items-end gap-1">
+                  <span class="px-2.5 py-0.5 rounded text-[10px] font-mono font-bold uppercase tracking-wider bg-cyan-500/20 text-cyan-300 border border-cyan-500/40">
+                    Elite Certificate
+                  </span>
+                  <span class="text-[11px] font-mono text-emerald-400 font-semibold">
+                    Score: 63%
+                  </span>
+                </div>
+              </div>
+              <p class="text-xs sm:text-sm text-slate-300 leading-relaxed mb-4">
+                Rigorous 12-week certification covering Boolean algebra, logic gates, combinational circuit synthesis, flip-flops, sequential circuits, finite state machines (FSM), and timing analysis.
+              </p>
+              <div class="pt-3 border-t border-slate-800/80 flex flex-wrap gap-1.5">
+                <span class="px-2 py-0.5 rounded bg-slate-900 border border-slate-800 text-[10px] font-mono text-slate-400">Combinational Logic</span>
+                <span class="px-2 py-0.5 rounded bg-slate-900 border border-slate-800 text-[10px] font-mono text-slate-400">Sequential Circuits</span>
+                <span class="px-2 py-0.5 rounded bg-slate-900 border border-slate-800 text-[10px] font-mono text-slate-400">Finite State Machines</span>
+                <span class="px-2 py-0.5 rounded bg-slate-900 border border-slate-800 text-[10px] font-mono text-slate-400">Timing Constraints</span>
+              </div>
+            </div>
+
+            <!-- Python Basic -->
+            <div class="glass-panel rounded-2xl p-6 sm:p-7 border border-slate-800 hover:border-slate-700 transition-all duration-300 hover:-translate-y-1">
+              <div class="flex items-start justify-between gap-3 mb-4">
+                <div class="flex items-center gap-3">
+                  <div class="p-3 rounded-xl bg-slate-900 border border-slate-800 text-purple-400">
+                    <i data-lucide="award" class="w-6 h-6"></i>
+                  </div>
+                  <div>
+                    <h3 class="font-bold text-white text-lg">Python (Basic)</h3>
+                    <div class="text-xs font-mono text-cyan-300">HackerRank</div>
+                  </div>
+                </div>
+                <div class="text-right flex flex-col items-end gap-1">
+                  <span class="px-2.5 py-0.5 rounded text-[10px] font-mono font-bold uppercase tracking-wider bg-slate-800 text-slate-300 border border-slate-700">
+                    Skill Verified
+                  </span>
+                  <span class="text-[11px] font-mono text-emerald-400 font-semibold">
+                    Verified
+                  </span>
+                </div>
+              </div>
+              <p class="text-xs sm:text-sm text-slate-300 leading-relaxed mb-4">
+                Validated fundamental Python programming proficiency, covering data structures (lists, tuples, dicts), flow control, algorithmic problem-solving, and functional constructs.
+              </p>
+              <div class="pt-3 border-t border-slate-800/80 flex flex-wrap gap-1.5">
+                <span class="px-2 py-0.5 rounded bg-slate-900 border border-slate-800 text-[10px] font-mono text-slate-400">Data Structures</span>
+                <span class="px-2 py-0.5 rounded bg-slate-900 border border-slate-800 text-[10px] font-mono text-slate-400">Control Flow</span>
+                <span class="px-2 py-0.5 rounded bg-slate-900 border border-slate-800 text-[10px] font-mono text-slate-400">Functions</span>
+              </div>
+            </div>
+
+            <!-- Introduction to Python -->
+            <div class="glass-panel rounded-2xl p-6 sm:p-7 border border-slate-800 hover:border-slate-700 transition-all duration-300 hover:-translate-y-1">
+              <div class="flex items-start justify-between gap-3 mb-4">
+                <div class="flex items-center gap-3">
+                  <div class="p-3 rounded-xl bg-slate-900 border border-slate-800 text-purple-400">
+                    <i data-lucide="award" class="w-6 h-6"></i>
+                  </div>
+                  <div>
+                    <h3 class="font-bold text-white text-lg">Introduction to Python</h3>
+                    <div class="text-xs font-mono text-cyan-300">SoloLearn</div>
+                  </div>
+                </div>
+                <div class="text-right flex flex-col items-end gap-1">
+                  <span class="px-2.5 py-0.5 rounded text-[10px] font-mono font-bold uppercase tracking-wider bg-slate-800 text-slate-300 border border-slate-700">
+                    Course Certificate
+                  </span>
+                  <span class="text-[11px] font-mono text-emerald-400 font-semibold">
+                    Completed
+                  </span>
+                </div>
+              </div>
+              <p class="text-xs sm:text-sm text-slate-300 leading-relaxed mb-4">
+                Certification covering Python programming syntax, standard libraries, object-oriented principles, modular code organization, and error handling.
+              </p>
+              <div class="pt-3 border-t border-slate-800/80 flex flex-wrap gap-1.5">
+                <span class="px-2 py-0.5 rounded bg-slate-900 border border-slate-800 text-[10px] font-mono text-slate-400">Core Syntax</span>
+                <span class="px-2 py-0.5 rounded bg-slate-900 border border-slate-800 text-[10px] font-mono text-slate-400">OOP Principles</span>
+                <span class="px-2 py-0.5 rounded bg-slate-900 border border-slate-800 text-[10px] font-mono text-slate-400">Exception Handling</span>
+              </div>
+            </div>
+
+            <!-- Workshops -->
+            <div class="glass-panel rounded-2xl p-6 sm:p-7 border border-slate-800 hover:border-slate-700 transition-all duration-300 hover:-translate-y-1">
+              <div class="flex items-start justify-between gap-3 mb-4">
+                <div class="flex items-center gap-3">
+                  <div class="p-3 rounded-xl bg-slate-900 border border-slate-800 text-purple-400">
+                    <i data-lucide="award" class="w-6 h-6"></i>
+                  </div>
+                  <div>
+                    <h3 class="font-bold text-white text-lg">Attended Technical Workshops</h3>
+                    <div class="text-xs font-mono text-cyan-300">Academic &amp; Technical Events</div>
+                  </div>
+                </div>
+                <div class="text-right flex flex-col items-end gap-1">
+                  <span class="px-2.5 py-0.5 rounded text-[10px] font-mono font-bold uppercase tracking-wider bg-slate-800 text-slate-300 border border-slate-700">
+                    Hands-on
+                  </span>
+                  <span class="text-[11px] font-mono text-emerald-400 font-semibold">
+                    Participation
+                  </span>
+                </div>
+              </div>
+              <p class="text-xs sm:text-sm text-slate-300 leading-relaxed mb-4">
+                Actively engaged in technical workshops and hands-on laboratory sessions focusing on electronics, microcontroller interfacing, digital simulation, and embedded prototyping.
+              </p>
+              <div class="pt-3 border-t border-slate-800/80 flex flex-wrap gap-1.5">
+                <span class="px-2 py-0.5 rounded bg-slate-900 border border-slate-800 text-[10px] font-mono text-slate-400">Embedded Hardware</span>
+                <span class="px-2 py-0.5 rounded bg-slate-900 border border-slate-800 text-[10px] font-mono text-slate-400">Sensor Interfacing</span>
+                <span class="px-2 py-0.5 rounded bg-slate-900 border border-slate-800 text-[10px] font-mono text-slate-400">Simulation Tools</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- CONTACT SECTION -->
+      <section id="contact" class="py-20 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          
+          <div class="text-center max-w-3xl mx-auto mb-16">
+            <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-950/60 border border-cyan-500/30 text-xs font-mono text-cyan-300 mb-3">
+              <span class="w-1.5 h-1.5 rounded-full bg-cyan-400"></span>
+              GET IN TOUCH
+            </div>
+            <h2 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+              Let's Connect and <span class="bg-gradient-to-r from-cyan-400 via-sky-300 to-purple-400 bg-clip-text text-transparent">Build Something Great</span>
+            </h2>
+            <p className="mt-3 text-slate-400 text-sm sm:text-base">
+              I'm currently seeking entry-level VLSI, Digital Design Engineer, or Python developer positions. Feel free to reach out directly.
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+            
+            <!-- Contact Cards -->
+            <div class="lg:col-span-5 space-y-4">
+              
+              <!-- Email Card -->
+              <div class="glass-panel rounded-2xl p-6 border border-cyan-500/30 hover:border-cyan-400 transition-colors">
+                <div class="flex items-center justify-between mb-3">
+                  <div class="p-2.5 rounded-xl bg-cyan-950/80 border border-cyan-500/40 text-cyan-400">
+                    <i data-lucide="mail" class="w-5 h-5"></i>
+                  </div>
+                  <button onclick="copyEmail()" id="copyEmailBtn" class="px-2.5 py-1 rounded-md bg-slate-900 border border-slate-700 text-xs font-mono text-slate-300 hover:text-cyan-400 transition-colors flex items-center gap-1">
+                    <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                    <span id="copyEmailText">Copy Email</span>
+                  </button>
+                </div>
+                <div class="text-xs font-mono text-slate-400 uppercase tracking-wider">
+                  Direct Email
+                </div>
+                <a href="mailto:sonnadtejashwini@gmail.com" class="text-base font-bold text-white hover:text-cyan-400 transition-colors block mt-1 break-all">
+                  sonnadtejashwini@gmail.com
+                </a>
+                <p class="text-xs text-slate-400 mt-2">
+                  Fastest response for interview requests and technical discussions.
+                </p>
+              </div>
+
+              <!-- LinkedIn -->
+              <div class="glass-panel rounded-2xl p-6 border border-slate-800 hover:border-cyan-500/40 transition-colors">
+                <div class="flex items-center gap-3 mb-2">
+                  <div class="p-2.5 rounded-xl bg-blue-950/80 border border-blue-500/40 text-blue-400">
+                    <i data-lucide="linkedin" class="w-5 h-5"></i>
+                  </div>
+                  <div>
+                    <div class="text-xs font-mono text-slate-400 uppercase">Professional Network</div>
+                    <div class="text-sm font-bold text-white">LinkedIn Profile</div>
+                  </div>
+                </div>
+                <p class="text-xs text-slate-400 mb-3">
+                  Connect for professional updates, recommendations, and recruiting.
+                </p>
+                <a href="https://www.linkedin.com/in/tejashwini-sonnad-9380a72aa" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-xs font-mono text-cyan-400 hover:underline">
+                  linkedin.com/in/tejashwini-sonnad-9380a72aa &rarr;
+                </a>
+              </div>
+
+              <!-- GitHub -->
+              <div class="glass-panel rounded-2xl p-6 border border-slate-800 hover:border-cyan-500/40 transition-colors">
+                <div class="flex items-center gap-3 mb-2">
+                  <div class="p-2.5 rounded-xl bg-slate-900 border border-slate-700 text-slate-300">
+                    <i data-lucide="github" class="w-5 h-5"></i>
+                  </div>
+                  <div>
+                    <div class="text-xs font-mono text-slate-400 uppercase">Code Repositories</div>
+                    <div class="text-sm font-bold text-white">GitHub Profile</div>
+                  </div>
+                </div>
+                <p class="text-xs text-slate-400 mb-3">
+                  Inspect public Python repositories and project source code.
+                </p>
+                <a href="https://github.com/teju-developer" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-xs font-mono text-cyan-400 hover:underline">
+                  github.com/teju-developer &rarr;
+                </a>
+              </div>
+
+              <!-- Location -->
+              <div class="glass-panel rounded-2xl p-4 border border-slate-800/80 flex items-center gap-3 text-xs text-slate-400 font-mono">
+                <i data-lucide="map-pin" class="w-4 h-4 text-cyan-400 flex-shrink-0"></i>
+                <span>Vijayapura, Karnataka, India (Open to Relocation)</span>
+              </div>
+
+            </div>
+
+            <!-- Contact Form -->
+            <div class="lg:col-span-7">
+              <div class="glass-panel rounded-3xl p-6 sm:p-8 border border-cyan-500/30 shadow-2xl">
+                
+                <div class="flex items-center justify-between border-b border-slate-800 pb-4 mb-6">
+                  <div>
+                    <h3 class="text-lg font-bold text-white">Send a Message</h3>
+                    <p class="text-xs text-slate-400">Fill out the form below to initiate communication.</p>
+                  </div>
+                  <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-cyan-950/80 border border-cyan-500/40 text-cyan-300">
+                    SECURE MAIL LINK
+                  </span>
+                </div>
+
+                <form id="contactForm" onsubmit="handleContactSubmit(event)" class="space-y-4">
+                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label class="block text-xs font-mono text-slate-400 mb-1.5">YOUR NAME *</label>
+                      <input type="text" id="formName" required placeholder="e.g. John Doe" class="w-full px-4 py-2.5 rounded-xl bg-[#070b16] border border-slate-800 focus:border-cyan-400 focus:outline-none text-white text-sm placeholder-slate-600 font-sans" />
+                    </div>
+                    <div>
+                      <label class="block text-xs font-mono text-slate-400 mb-1.5">YOUR EMAIL *</label>
+                      <input type="email" id="formEmail" required placeholder="e.g. recruiter@company.com" class="w-full px-4 py-2.5 rounded-xl bg-[#070b16] border border-slate-800 focus:border-cyan-400 focus:outline-none text-white text-sm placeholder-slate-600 font-sans" />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label class="block text-xs font-mono text-slate-400 mb-1.5">SUBJECT *</label>
+                    <input type="text" id="formSubject" required placeholder="e.g. VLSI Design Engineer Opportunity / Interview Request" class="w-full px-4 py-2.5 rounded-xl bg-[#070b16] border border-slate-800 focus:border-cyan-400 focus:outline-none text-white text-sm placeholder-slate-600 font-sans" />
+                  </div>
+
+                  <div>
+                    <label class="block text-xs font-mono text-slate-400 mb-1.5">MESSAGE *</label>
+                    <textarea id="formMessage" rows="4" required placeholder="Write your message, role details, or inquiry here..." class="w-full px-4 py-2.5 rounded-xl bg-[#070b16] border border-slate-800 focus:border-cyan-400 focus:outline-none text-white text-sm placeholder-slate-600 font-sans resize-none"></textarea>
+                  </div>
+
+                  <button type="submit" class="w-full py-3.5 rounded-xl font-semibold text-sm bg-cyan-500 hover:bg-cyan-400 text-slate-950 transition-all duration-200 shadow-[0_0_25px_rgba(0,240,255,0.3)] hover:shadow-[0_0_35px_rgba(0,240,255,0.5)] flex items-center justify-center gap-2">
+                    <i data-lucide="send" class="w-4 h-4 text-slate-950"></i>
+                    <span>Send Message</span>
+                  </button>
+                </form>
+
+                <!-- Informative Notice Banner -->
+                <div class="mt-5 p-3.5 rounded-xl bg-[#050914] border border-slate-800 flex items-start gap-2.5 text-xs text-slate-400 leading-relaxed">
+                  <i data-lucide="info" class="w-4 h-4 text-cyan-400 flex-shrink-0 mt-0.5"></i>
+                  <div>
+                    <strong class="text-slate-300">Backend Notice:</strong> Submitting this form opens your default mail client pre-filled with your message to <code>sonnadtejashwini@gmail.com</code>. In a production deployment, this form can be connected directly to Formspree, Web3Forms, or EmailJS by supplying an API key.
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="relative border-t border-slate-800/80 bg-[#04060d] pt-12 pb-8 text-slate-400 text-xs">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <div class="flex flex-col md:flex-row items-center justify-between gap-6 pb-8 border-b border-slate-800/60">
+          
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-lg bg-cyan-950/80 border border-cyan-500/40 flex items-center justify-center text-cyan-400">
+              <i data-lucide="cpu" class="w-4 h-4"></i>
+            </div>
+            <div>
+              <div class="font-bold text-white text-sm">Tejashwini Suresh Sonnad</div>
+              <div class="font-mono text-[10px] text-cyan-400">Aspiring VLSI &amp; Digital Design Engineer</div>
+            </div>
+          </div>
+
+          <div class="flex flex-wrap items-center justify-center gap-4 font-mono text-xs text-slate-300">
+            <a href="#about" class="hover:text-cyan-400 transition-colors">About</a>
+            <a href="#skills" class="hover:text-cyan-400 transition-colors">Skills</a>
+            <a href="#projects" class="hover:text-cyan-400 transition-colors">Projects</a>
+            <a href="#education" class="hover:text-cyan-400 transition-colors">Education</a>
+            <a href="#certifications" class="hover:text-cyan-400 transition-colors">Certifications</a>
+            <a href="#contact" class="hover:text-cyan-400 transition-colors">Contact</a>
+            <button onclick="openResumeModal()" class="hover:text-cyan-400 transition-colors text-cyan-400">Resume</button>
+          </div>
+
+          <div class="flex items-center gap-3">
+            <a href="https://github.com/teju-developer" target="_blank" rel="noopener noreferrer" class="p-2 rounded-lg bg-slate-900 border border-slate-800 hover:text-cyan-400 hover:border-cyan-500/40 transition-colors" title="GitHub">
+              <i data-lucide="github" class="w-4 h-4"></i>
+            </a>
+            <a href="https://www.linkedin.com/in/tejashwini-sonnad-9380a72aa" target="_blank" rel="noopener noreferrer" class="p-2 rounded-lg bg-slate-900 border border-slate-800 hover:text-cyan-400 hover:border-cyan-500/40 transition-colors" title="LinkedIn">
+              <i data-lucide="linkedin" class="w-4 h-4"></i>
+            </a>
+            <a href="mailto:sonnadtejashwini@gmail.com" class="p-2 rounded-lg bg-slate-900 border border-slate-800 hover:text-cyan-400 hover:border-cyan-500/40 transition-colors" title="Email">
+              <i data-lucide="mail" class="w-4 h-4"></i>
+            </a>
+            <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="p-2 rounded-lg bg-cyan-950/80 border border-cyan-500/40 text-cyan-400 hover:bg-cyan-900 transition-colors ml-2" title="Back to Top">
+              <i data-lucide="arrow-up" class="w-4 h-4"></i>
+            </button>
+          </div>
+
+        </div>
+
+        <div class="pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-slate-500 text-[11px] font-mono">
+          <div>
+            &copy; 2026 Tejashwini Suresh Sonnad. All rights reserved.
+          </div>
+          <div class="flex items-center gap-2">
+            <span>Vijayapura, Karnataka</span>
+            <span>&bull;</span>
+            <span class="text-cyan-500">React + Tailwind CSS Architecture</span>
+          </div>
+        </div>
+
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- MODAL 1: UART ARCHITECTURE & WAVELENGTH DECK -->
+  <div id="uartModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md overflow-y-auto">
+    <div class="relative w-full max-w-5xl rounded-2xl bg-[#090d1a] border border-cyan-500/40 shadow-[0_0_50px_rgba(0,240,255,0.2)] overflow-hidden my-8">
+      
+      <!-- Header -->
+      <div class="flex items-center justify-between px-6 py-4 border-b border-slate-800 bg-[#060913]">
+        <div class="flex items-center gap-3">
+          <div class="p-2 rounded-lg bg-cyan-950/80 border border-cyan-500/40 text-cyan-400">
+            <i data-lucide="cpu" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="text-base sm:text-lg font-bold text-white">UART Controller Architecture &amp; Verification Deck</h3>
+            <p class="text-xs font-mono text-cyan-400">Verilog HDL &bull; ModelSim &bull; 50 MHz &bull; 115200 Baud &bull; 16x Oversampling &bull; 16-Deep FIFO</p>
+          </div>
+        </div>
+        <button onclick="closeUartModal()" class="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Tab Buttons -->
+      <div class="flex border-b border-slate-800 bg-[#070b16] px-6 text-xs font-mono">
+        <button onclick="switchUartTab('diagram')" id="tabBtnDiagram" class="py-3 px-4 border-b-2 border-cyan-400 text-cyan-300 font-semibold flex items-center gap-2">
+          <i data-lucide="layers" class="w-4 h-4"></i>
+          Architecture Diagram
+        </button>
+        <button onclick="switchUartTab('waveforms')" id="tabBtnWaveforms" class="py-3 px-4 border-b-2 border-transparent text-slate-400 hover:text-slate-200 font-semibold flex items-center gap-2">
+          <i data-lucide="activity" class="w-4 h-4"></i>
+          Waveform Simulation
+        </button>
+        <button onclick="switchUartTab('testcases')" id="tabBtnTestcases" class="py-3 px-4 border-b-2 border-transparent text-slate-400 hover:text-slate-200 font-semibold flex items-center gap-2">
+          <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400"></i>
+          10 ModelSim Test Cases
+        </button>
+      </div>
+
+      <!-- Tab Content Area -->
+      <div class="p-6 max-h-[72vh] overflow-y-auto space-y-6">
+        
+        <!-- Tab 1: Diagram -->
+        <div id="tabContentDiagram" class="space-y-6">
+          <div class="rounded-xl border border-cyan-500/30 overflow-hidden bg-[#060913]">
+            <img src="public/uart-block-diagram.svg" alt="UART Top Architecture" class="w-full h-auto object-contain" />
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800">
+              <div class="text-cyan-400 font-mono font-bold text-xs uppercase mb-1">Baud Rate Generator</div>
+              <p class="text-xs text-slate-300 leading-relaxed">
+                Divides 50 MHz input clock using a Modulo-27 counter to produce 1.8432 MHz sampling ticks (16 &times; 115200 Hz).
+              </p>
+            </div>
+            <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800">
+              <div class="text-purple-400 font-mono font-bold text-xs uppercase mb-1">16-Deep FIFO Buffers</div>
+              <p class="text-xs text-slate-300 leading-relaxed">
+                Circular dual-pointer memory buffers for TX and RX channels to prevent data starvation and handle burst transmissions.
+              </p>
+            </div>
+            <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800">
+              <div class="text-emerald-400 font-mono font-bold text-xs uppercase mb-1">Error Detection Engine</div>
+              <p class="text-xs text-slate-300 leading-relaxed">
+                Computes real-time parity check bit and monitors stop-bit integrity to detect framing errors with zero false negatives.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 2: Waveforms -->
+        <div id="tabContentWaveforms" class="hidden space-y-6">
+          <div class="p-4 rounded-xl bg-[#060a16] border border-cyan-500/30 font-mono">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-800 text-xs">
+              <span class="text-cyan-300 font-bold">MODELSIM TIMING WAVEFORM INSPECTOR</span>
+              <span class="text-emerald-400 bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-500/30">
+                ZERO TIMING VIOLATIONS
+              </span>
+            </div>
+
+            <div class="mt-4 space-y-3">
+              <div class="flex items-center text-xs">
+                <span class="w-28 text-slate-400 text-[11px]">sys_clk (50MHz)</span>
+                <div class="flex-1 flex items-center h-5 border-l border-r border-slate-800" id="waveformSysClk">
+                  <!-- Generated by script -->
+                </div>
+              </div>
+
+              <div class="flex items-center text-xs">
+                <span class="w-28 text-slate-400 text-[11px]">s_tick (16x Baud)</span>
+                <div class="flex-1 flex items-center h-5 border-l border-r border-slate-800" id="waveformSTick">
+                  <!-- Generated by script -->
+                </div>
+              </div>
+
+              <div class="flex items-center text-xs">
+                <span class="w-28 text-slate-400 text-[11px]">tx_data [7:0]</span>
+                <div class="flex-1 flex items-center h-6 bg-slate-900/80 rounded border border-slate-800 px-3 text-[11px] text-cyan-300">
+                  8'h54 (ASCII 'T') | Binary [01010100]
+                </div>
+              </div>
+
+              <div class="flex items-center text-xs">
+                <span class="w-28 text-slate-400 text-[11px]">txd (Serial Bus)</span>
+                <div class="flex-1 flex items-center h-6 bg-[#030712] rounded border border-cyan-500/40 px-2 space-x-1 text-[10px] overflow-x-auto">
+                  <span class="px-1.5 py-0.5 rounded bg-slate-800 text-slate-400">IDLE:1</span>
+                  <span class="px-1.5 py-0.5 rounded bg-red-950 text-red-300">START:0</span>
+                  <span class="px-1.5 py-0.5 rounded bg-cyan-950 text-cyan-300">D0:0</span>
+                  <span class="px-1.5 py-0.5 rounded bg-cyan-950 text-cyan-300">D1:0</span>
+                  <span class="px-1.5 py-0.5 rounded bg-cyan-900 text-cyan-200 font-bold">D2:1</span>
+                  <span class="px-1.5 py-0.5 rounded bg-cyan-950 text-cyan-300">D3:0</span>
+                  <span class="px-1.5 py-0.5 rounded bg-cyan-900 text-cyan-200 font-bold">D4:1</span>
+                  <span class="px-1.5 py-0.5 rounded bg-cyan-950 text-cyan-300">D5:0</span>
+                  <span class="px-1.5 py-0.5 rounded bg-cyan-900 text-cyan-200 font-bold">D6:1</span>
+                  <span class="px-1.5 py-0.5 rounded bg-purple-950 text-purple-300">PARITY:1</span>
+                  <span class="px-1.5 py-0.5 rounded bg-emerald-950 text-emerald-300">STOP:1</span>
+                </div>
+              </div>
+
+              <div class="flex items-center text-xs">
+                <span class="w-28 text-slate-400 text-[11px]">parity_err</span>
+                <div class="flex-1 flex items-center h-5 bg-slate-950 rounded px-2 text-emerald-400 text-[10px]">
+                  0 (No Parity Violation)
+                </div>
+              </div>
+              <div class="flex items-center text-xs">
+                <span class="w-28 text-slate-400 text-[11px]">frame_err</span>
+                <div class="flex-1 flex items-center h-5 bg-slate-950 rounded px-2 text-emerald-400 text-[10px]">
+                  0 (Stop Bit Verified High)
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-4 pt-3 border-t border-slate-800 text-[11px] text-slate-400">
+              Waveform verified with ModelSim behavioral and post-synthesis functional simulations.
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 3: 10 Test Cases -->
+        <div id="tabContentTestcases" class="hidden space-y-4">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-mono text-slate-400">Comprehensive Testbench Regression Suite (10 / 10 Pass)</span>
+            <span class="text-xs font-mono text-emerald-400 bg-emerald-950/60 px-2.5 py-1 rounded-md border border-emerald-500/40">Zero Failures Recorded</span>
+          </div>
+
+          <div id="testCasesList" class="divide-y divide-slate-800/80 rounded-xl border border-slate-800 bg-[#060913] overflow-hidden">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="px-6 py-3.5 border-t border-slate-800 bg-[#060913] flex items-center justify-between text-xs font-mono text-slate-400">
+        <span>Project documented in engineering resume</span>
+        <button onclick="closeUartModal()" class="px-4 py-1.5 rounded-lg bg-cyan-950/80 hover:bg-cyan-900 text-cyan-300 border border-cyan-500/40 transition-colors">
+          Close Deck
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- MODAL 2: TKINTER CALCULATOR DEMO -->
+  <div id="calcModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md">
+    <div class="relative w-full max-w-sm rounded-2xl bg-[#0b1020] border border-cyan-500/40 p-6 shadow-2xl">
+      <div class="flex items-center justify-between pb-3 mb-4 border-b border-slate-800">
+        <div class="flex items-center gap-2">
+          <i data-lucide="calculator" class="w-5 h-5 text-cyan-400"></i>
+          <h4 class="text-sm font-mono font-bold text-white">Tkinter Calculator (Live Demo)</h4>
+        </div>
+        <button onclick="closeCalcModal()" class="p-1 rounded-lg text-slate-400 hover:text-white transition-colors">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div class="mb-4 p-3 rounded-xl bg-[#030611] border border-cyan-500/30 text-right">
+        <div id="calcHistory" class="text-[10px] font-mono text-slate-500 h-4"></div>
+        <div id="calcScreen" class="text-2xl font-mono font-bold text-cyan-300 tracking-wider overflow-x-auto">0</div>
+      </div>
+
+      <div class="grid grid-cols-4 gap-2 font-mono text-sm">
+        <button onclick="calcClear()" class="col-span-2 p-3 rounded-lg bg-red-950/40 hover:bg-red-900/60 border border-red-500/30 text-red-300 font-bold">CLEAR</button>
+        <button onclick="calcOp('/')" class="p-3 rounded-lg bg-slate-800 hover:bg-slate-700 text-cyan-400 font-bold">/</button>
+        <button onclick="calcOp('*')" class="p-3 rounded-lg bg-slate-800 hover:bg-slate-700 text-cyan-400 font-bold">&times;</button>
+
+        <button onclick="calcNum('7')" class="p-3 rounded-lg bg-slate-900/90 hover:bg-slate-800 text-white">7</button>
+        <button onclick="calcNum('8')" class="p-3 rounded-lg bg-slate-900/90 hover:bg-slate-800 text-white">8</button>
+        <button onclick="calcNum('9')" class="p-3 rounded-lg bg-slate-900/90 hover:bg-slate-800 text-white">9</button>
+        <button onclick="calcOp('-')" class="p-3 rounded-lg bg-slate-800 hover:bg-slate-700 text-cyan-400 font-bold">-</button>
+
+        <button onclick="calcNum('4')" class="p-3 rounded-lg bg-slate-900/90 hover:bg-slate-800 text-white">4</button>
+        <button onclick="calcNum('5')" class="p-3 rounded-lg bg-slate-900/90 hover:bg-slate-800 text-white">5</button>
+        <button onclick="calcNum('6')" class="p-3 rounded-lg bg-slate-900/90 hover:bg-slate-800 text-white">6</button>
+        <button onclick="calcOp('+')" class="p-3 rounded-lg bg-slate-800 hover:bg-slate-700 text-cyan-400 font-bold">+</button>
+
+        <button onclick="calcNum('1')" class="p-3 rounded-lg bg-slate-900/90 hover:bg-slate-800 text-white">1</button>
+        <button onclick="calcNum('2')" class="p-3 rounded-lg bg-slate-900/90 hover:bg-slate-800 text-white">2</button>
+        <button onclick="calcNum('3')" class="p-3 rounded-lg bg-slate-900/90 hover:bg-slate-800 text-white">3</button>
+        <button onclick="calcEqual()" class="row-span-2 p-3 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold flex items-center justify-center text-lg">=</button>
+
+        <button onclick="calcNum('0')" class="col-span-2 p-3 rounded-lg bg-slate-900/90 hover:bg-slate-800 text-white">0</button>
+        <button onclick="calcNum('.')" class="p-3 rounded-lg bg-slate-900/90 hover:bg-slate-800 text-white">.</button>
+      </div>
+
+      <div class="mt-4 pt-3 border-t border-slate-800 text-[10px] font-mono text-center text-slate-400">
+        Source: <a href="https://github.com/teju-developer/calculater.py" target="_blank" rel="noopener noreferrer" class="text-cyan-400 underline">github.com/teju-developer/calculater.py</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 3: RESUME VIEWER & DOWNLOADER -->
+  <div id="resumeModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md overflow-y-auto">
+    <div class="relative w-full max-w-4xl rounded-2xl bg-[#090d1a] border border-cyan-500/40 shadow-2xl overflow-hidden my-8">
+      
+      <!-- Resume Header -->
+      <div class="flex items-center justify-between px-6 py-4 border-b border-slate-800 bg-[#060913]">
+        <div class="flex items-center gap-3">
+          <div class="p-2 rounded-lg bg-cyan-950/80 border border-cyan-500/40 text-cyan-400">
+            <i data-lucide="file-text" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="text-base sm:text-lg font-bold text-white">Tejashwini Suresh Sonnad &bull; Curriculum Vitae</h3>
+            <p class="text-xs font-mono text-cyan-400">Aspiring VLSI &amp; Digital Design Engineer | Python Developer</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-3">
+          <button onclick="downloadResume()" class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-slate-950 text-xs font-mono font-bold transition-all shadow-[0_0_15px_rgba(0,240,255,0.3)]">
+            <i data-lucide="download" class="w-4 h-4"></i>
+            Download PDF
+          </button>
+          <button onclick="closeResumeModal()" class="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors">
+            <i data-lucide="x" class="w-5 h-5"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Content Area -->
+      <div class="p-6 sm:p-8 max-h-[75vh] overflow-y-auto space-y-6 text-slate-200 text-sm">
+        <div class="border-b border-slate-800 pb-5">
+          <h2 class="text-2xl font-extrabold text-white">TEJASHWINI SURESH SONNAD</h2>
+          <div class="text-sm font-mono text-cyan-400 mt-1">Aspiring VLSI &amp; Digital Design Engineer &bull; Python Developer</div>
+          <div class="flex flex-wrap gap-x-4 gap-y-1 text-xs text-slate-400 mt-2 font-mono">
+            <span>Location: Vijayapura, Karnataka, India</span>
+            <span>Email: sonnadtejashwini@gmail.com</span>
+            <span>GitHub: github.com/teju-developer</span>
+            <span>LinkedIn: linkedin.com/in/tejashwini-sonnad-9380a72aa</span>
+          </div>
+        </div>
+
+        <div>
+          <h4 class="text-xs font-mono font-bold text-cyan-400 uppercase tracking-wider mb-2 border-b border-slate-800 pb-1">Career Objective</h4>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            Electronics and Communication Engineering student passionate about Digital Design, Verilog HDL, FPGA concepts, Embedded Systems and Python Development. I enjoy designing digital systems and transforming ideas into practical engineering solutions. Seeking an entry-level VLSI / Digital Design Engineer role to design and verify robust digital architectures.
+          </p>
+        </div>
+
+        <div>
+          <h4 class="text-xs font-mono font-bold text-cyan-400 uppercase tracking-wider mb-3 border-b border-slate-800 pb-1">Education</h4>
+          <div class="space-y-3">
+            <div>
+              <div class="flex justify-between font-semibold text-white">
+                <span>Bachelor of Engineering in Electronics and Communication Engineering</span>
+                <span class="text-xs font-mono text-cyan-400">2023–2027</span>
+              </div>
+              <div class="text-xs text-slate-400">KLE Institute of Technology, Hubballi | CGPA: 7.8/10</div>
+            </div>
+            <div>
+              <div class="flex justify-between font-semibold text-white">
+                <span>Pre-University Course (PUC)</span>
+                <span class="text-xs font-mono text-cyan-400">2021–2023</span>
+              </div>
+              <div class="text-xs text-slate-400">Sanikethan College, Mudhol | 88%</div>
+            </div>
+            <div>
+              <div class="flex justify-between font-semibold text-white">
+                <span>Secondary School Leaving Certificate (SSLC)</span>
+                <span class="text-xs font-mono text-cyan-400">2020–2021</span>
+              </div>
+              <div class="text-xs text-slate-400">MDRS, Nelithirtha, Mangalore | 87.2%</div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <h4 class="text-xs font-mono font-bold text-cyan-400 uppercase tracking-wider mb-3 border-b border-slate-800 pb-1">Technical Skills</h4>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+            <div><strong class="text-white">VLSI &amp; Digital Design:</strong> Verilog HDL, UART, FIFO Design, Digital Circuits, ModelSim</div>
+            <div><strong class="text-white">Programming:</strong> Python, NumPy</div>
+            <div><strong class="text-white">Embedded Systems:</strong> Arduino, ESP32</div>
+            <div><strong class="text-white">Development Tools:</strong> VS Code, GitHub</div>
+            <div><strong class="text-white">Soft Skills:</strong> Problem Solving, Logical Thinking, Teamwork</div>
+          </div>
+        </div>
+
+        <div>
+          <h4 class="text-xs font-mono font-bold text-cyan-400 uppercase tracking-wider mb-3 border-b border-slate-800 pb-1">Key Projects</h4>
+          <div class="space-y-4">
+            <div>
+              <div class="flex justify-between font-semibold text-white">
+                <span>UART Controller with FIFO and Error Detection</span>
+                <span class="text-xs font-mono text-cyan-400">Verilog HDL, ModelSim</span>
+              </div>
+              <ul class="list-disc list-inside text-xs text-slate-300 mt-1 space-y-1">
+                <li>Designed and verified a UART controller using Verilog HDL.</li>
+                <li>Implemented transmitter, receiver and baud-rate generator.</li>
+                <li>Integrated 16-deep TX and RX FIFO buffers.</li>
+                <li>Configured 115200 baud rate, 50 MHz clock and 16x oversampling.</li>
+                <li>Implemented parity and framing error detection.</li>
+                <li>Verified the design using 10 ModelSim test cases with zero failures.</li>
+                <li>Analysed simulation waveforms to verify timing and data integrity.</li>
+              </ul>
+            </div>
+            <div>
+              <div class="flex justify-between font-semibold text-white">
+                <span>Weather App</span>
+                <span class="text-xs font-mono text-cyan-400">Python</span>
+              </div>
+              <p class="text-xs text-slate-300 mt-1">Developed a Python application that displays current weather of a selected location. (https://github.com/teju-developer/wether-app)</p>
+            </div>
+            <div>
+              <div class="flex justify-between font-semibold text-white">
+                <span>Calculator &amp; Tkinter Models</span>
+                <span class="text-xs font-mono text-cyan-400">Python, Tkinter</span>
+              </div>
+              <p class="text-xs text-slate-300 mt-1">Developed GUI-based calculator and event-handling widget prototypes using Tkinter. (https://github.com/teju-developer/calculater.py)</p>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <h4 class="text-xs font-mono font-bold text-cyan-400 uppercase tracking-wider mb-2 border-b border-slate-800 pb-1">Certifications</h4>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-slate-300">
+            <div>&bull; Digital Circuits – NPTEL, IIT Kharagpur (Elite Certificate, 63%)</div>
+            <div>&bull; Python (Basic) – HackerRank</div>
+            <div>&bull; Introduction to Python – SoloLearn</div>
+            <div>&bull; Attended Technical Workshops</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="px-6 py-4 border-t border-slate-800 bg-[#060913] flex items-center justify-between">
+        <span class="text-xs font-mono text-slate-500">Official Resume Document</span>
+        <div class="flex gap-3">
+          <button onclick="downloadResume()" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-slate-950 text-xs font-mono font-bold transition-all">
+            <i data-lucide="download" class="w-4 h-4"></i>
+            Download PDF Resume
+          </button>
+          <button onclick="closeResumeModal()" class="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-white text-xs font-mono transition-colors">
+            Close
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- JAVASCRIPT LOGIC -->
+  <script>
+    // Initialize Lucide icons
+    lucide.createIcons();
+
+    // Circuit Background Canvas
+    (function initCircuitCanvas() {
+      const canvas = document.getElementById('circuitCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      let width = (canvas.width = window.innerWidth);
+      let height = (canvas.height = window.innerHeight);
+
+      window.addEventListener('resize', () => {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+      });
+
+      const gridSize = 45;
+      const cols = Math.ceil(width / gridSize);
+      const rows = Math.ceil(height / gridSize);
+      const pulses = [];
+
+      for (let i = 0; i < 28; i++) {
+        pulses.push({
+          x: Math.floor(Math.random() * cols) * gridSize,
+          y: Math.floor(Math.random() * rows) * gridSize,
+          dir: Math.floor(Math.random() * 4),
+          speed: 1.5 + Math.random() * 1.5,
+          color: Math.random() > 0.3 ? '#00f0ff' : '#a855f7',
+          life: 100 + Math.random() * 200,
+          age: 0
+        });
+      }
+
+      function animate() {
+        ctx.clearRect(0, 0, width, height);
+        ctx.fillStyle = 'rgba(56, 189, 248, 0.08)';
+        for (let x = gridSize; x < width; x += gridSize * 2) {
+          for (let y = gridSize; y < height; y += gridSize * 2) {
+            ctx.beginPath();
+            ctx.arc(x, y, 1, 0, Math.PI * 2);
+            ctx.fill();
+          }
+        }
+
+        pulses.forEach(p => {
+          p.age++;
+          if (p.age > p.life) {
+            p.x = Math.floor(Math.random() * cols) * gridSize;
+            p.y = Math.floor(Math.random() * rows) * gridSize;
+            p.dir = Math.floor(Math.random() * 4);
+            p.age = 0;
+            p.life = 100 + Math.random() * 200;
+          }
+          const prevX = p.x;
+          const prevY = p.y;
+          if (p.dir === 0) p.y -= p.speed;
+          else if (p.dir === 1) p.x += p.speed;
+          else if (p.dir === 2) p.y += p.speed;
+          else if (p.dir === 3) p.x -= p.speed;
+
+          if (Math.random() < 0.04) p.dir = (p.dir + (Math.random() > 0.5 ? 1 : 3)) % 4;
+          if (p.x < 0) p.x = width;
+          if (p.x > width) p.x = 0;
+          if (p.y < 0) p.y = height;
+          if (p.y > height) p.y = 0;
+
+          ctx.beginPath();
+          ctx.moveTo(prevX, prevY);
+          ctx.lineTo(p.x, p.y);
+          ctx.strokeStyle = p.color;
+          ctx.globalAlpha = Math.sin((p.age / p.life) * Math.PI) * 0.45;
+          ctx.lineWidth = 1.5;
+          ctx.stroke();
+
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, 2, 0, Math.PI * 2);
+          ctx.fillStyle = '#ffffff';
+          ctx.fill();
+        });
+
+        ctx.globalAlpha = 1.0;
+        requestAnimationFrame(animate);
+      }
+      animate();
+    })();
+
+    // Mobile Navigation Drawer Toggle
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    mobileMenuBtn.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+    });
+    document.querySelectorAll('.mobile-link').forEach(link => {
+      link.addEventListener('click', () => mobileMenu.classList.add('hidden'));
+    });
+
+    // Hero Live UART Shift Register Animation
+    const serialBits = [
+      { label: 'START', val: '0', type: 'ctrl' },
+      { label: 'D0', val: '0', type: 'data' },
+      { label: 'D1', val: '0', type: 'data' },
+      { label: 'D2', val: '1', type: 'data' },
+      { label: 'D3', val: '0', type: 'data' },
+      { label: 'D4', val: '1', type: 'data' },
+      { label: 'D5', val: '0', type: 'data' },
+      { label: 'D6', val: '1', type: 'data' },
+      { label: 'PARITY', val: '1', type: 'parity' },
+      { label: 'STOP', val: '1', type: 'ctrl' }
+    ];
+
+    let activeBit = 0;
+    let clockRunning = true;
+
+    function renderBitStream() {
+      const container = document.getElementById('bitStreamContainer');
+      if (!container) return;
+      container.innerHTML = serialBits.map((b, i) => {
+        const isCurrent = i === activeBit && clockRunning;
+        let classes = isCurrent 
+          ? 'bg-cyan-500 text-slate-950 font-bold scale-110 shadow-[0_0_10px_#00f0ff]' 
+          : b.type === 'ctrl' 
+          ? 'bg-slate-800 text-slate-400' 
+          : b.type === 'parity' 
+          ? 'bg-purple-950/60 text-purple-300 border border-purple-500/30' 
+          : 'bg-slate-900 text-cyan-300';
+        return `
+          <div class="p-1 rounded text-[10px] transition-all duration-200 ${classes}">
+            <div class="text-[8px] opacity-75">${b.label}</div>
+            <div class="font-bold">${b.val}</div>
+          </div>
+        `;
+      }).join('');
+      document.getElementById('currentStrobe').innerText = `Strobe: Tick #${activeBit}`;
+    }
+    renderBitStream();
+
+    setInterval(() => {
+      if (clockRunning) {
+        activeBit = (activeBit + 1) % serialBits.length;
+        renderBitStream();
+      }
+    }, 450);
+
+    const clkToggleBtn = document.getElementById('clkToggleBtn');
+    clkToggleBtn.addEventListener('click', () => {
+      clockRunning = !clockRunning;
+      document.getElementById('clkStatusText').innerText = clockRunning ? 'CLK RUNNING' : 'CLK PAUSED';
+      renderBitStream();
+    });
+
+    // Populate Hero Clock Strip
+    const clockStrip = document.getElementById('waveClockStrip');
+    if (clockStrip) {
+      clockStrip.innerHTML = Array.from({ length: 24 }).map((_, i) => `
+        <div class="w-2 h-4 border-l border-t border-r ${i % 2 === 0 ? 'border-cyan-400/80 bg-cyan-500/10' : 'border-transparent h-1'}"></div>
+      `).join('');
+    }
+
+    // Populate Waveform Clock Traces in UART Modal
+    const wfSysClk = document.getElementById('waveformSysClk');
+    if (wfSysClk) {
+      wfSysClk.innerHTML = Array.from({ length: 32 }).map((_, i) => `
+        <div class="flex-1 h-full border-l border-t border-r ${i % 2 === 0 ? 'border-cyan-400/90 bg-cyan-500/10' : 'border-transparent h-1'}"></div>
+      `).join('');
+    }
+    const wfSTick = document.getElementById('waveformSTick');
+    if (wfSTick) {
+      wfSTick.innerHTML = Array.from({ length: 32 }).map((_, i) => `
+        <div class="flex-1 h-full ${i % 4 === 0 ? 'border-l-2 border-emerald-400 bg-emerald-400/30' : ''}"></div>
+      `).join('');
+    }
+
+    // Populate 10 Test Cases in UART Modal
+    const testCases = [
+      { id: 1, name: "TC1: Basic ASCII Single Byte ('T')", status: "PASS", errors: "None", notes: "Clean Start bit, 8 data bits, Even parity, Stop bit verified" },
+      { id: 2, name: "TC2: Full-Duplex Simultaneous TX/RX", status: "PASS", errors: "None", notes: "Independent TX and RX paths operating concurrently with no collision" },
+      { id: 3, name: "TC3: 16-Deep FIFO Burst Fill", status: "PASS", errors: "None", notes: "Pointers advance correctly, full flag asserts at entry 16" },
+      { id: 4, name: "TC4: 16-Deep FIFO Continuous Drain", status: "PASS", errors: "None", notes: "Empty flag asserts cleanly, no data corruption" },
+      { id: 5, name: "TC5: 16x Oversampling Mid-Bit Sync", status: "PASS", errors: "None", notes: "Sample strobe triggered at tick 7 to avoid transition edges" },
+      { id: 6, name: "TC6: Parity Error Injection & Flagging", status: "PASS", errors: "PE Asserted", notes: "Deliberate corrupted parity bit caught; PE flag raised accurately" },
+      { id: 7, name: "TC7: Framing Error (Invalid Stop Bit)", status: "PASS", errors: "FE Asserted", notes: "Missing high stop bit flagged; FE status bit captured" },
+      { id: 8, name: "TC8: Back-to-Back Consecutive Packets", status: "PASS", errors: "None", notes: "Zero inter-frame dead cycle requirement respected" },
+      { id: 9, name: "TC9: Baud Rate Modulo-27 Jitter Analysis", status: "PASS", errors: "None", notes: "Clock divider 50MHz / (16 * 115200) = 27.1; jitter within margin" },
+      { id: 10, name: "TC10: Asynchronous Reset Assertion", status: "PASS", errors: "None", notes: "Immediate reset of all FSM states and FIFO pointers verified" }
+    ];
+
+    const testCasesList = document.getElementById('testCasesList');
+    if (testCasesList) {
+      testCasesList.innerHTML = testCases.map(tc => `
+        <div class="p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2 hover:bg-slate-900/40 transition-colors">
+          <div>
+            <div class="text-xs font-mono font-bold text-white flex items-center gap-2">
+              <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-emerald-400 flex-shrink-0"></i>
+              ${tc.name}
+            </div>
+            <div class="text-[11px] text-slate-400 mt-0.5">${tc.notes}</div>
+          </div>
+          <div class="flex items-center gap-2 self-start sm:self-auto font-mono text-[10px]">
+            <span class="px-2 py-0.5 rounded bg-slate-800 text-slate-300">Err: ${tc.errors}</span>
+            <span class="px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-500/30 font-bold">${tc.status}</span>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // UART Modal Controls
+    function openUartModal() {
+      document.getElementById('uartModal').classList.remove('hidden');
+      lucide.createIcons();
+    }
+    function closeUartModal() {
+      document.getElementById('uartModal').classList.add('hidden');
+    }
+    function switchUartTab(tab) {
+      document.getElementById('tabContentDiagram').classList.add('hidden');
+      document.getElementById('tabContentWaveforms').classList.add('hidden');
+      document.getElementById('tabContentTestcases').classList.add('hidden');
+
+      document.getElementById('tabBtnDiagram').className = "py-3 px-4 border-b-2 border-transparent text-slate-400 hover:text-slate-200 font-semibold flex items-center gap-2";
+      document.getElementById('tabBtnWaveforms').className = "py-3 px-4 border-b-2 border-transparent text-slate-400 hover:text-slate-200 font-semibold flex items-center gap-2";
+      document.getElementById('tabBtnTestcases').className = "py-3 px-4 border-b-2 border-transparent text-slate-400 hover:text-slate-200 font-semibold flex items-center gap-2";
+
+      if (tab === 'diagram') {
+        document.getElementById('tabContentDiagram').classList.remove('hidden');
+        document.getElementById('tabBtnDiagram').className = "py-3 px-4 border-b-2 border-cyan-400 text-cyan-300 font-semibold flex items-center gap-2";
+      } else if (tab === 'waveforms') {
+        document.getElementById('tabContentWaveforms').classList.remove('hidden');
+        document.getElementById('tabBtnWaveforms').className = "py-3 px-4 border-b-2 border-cyan-400 text-cyan-300 font-semibold flex items-center gap-2";
+      } else if (tab === 'testcases') {
+        document.getElementById('tabContentTestcases').classList.remove('hidden');
+        document.getElementById('tabBtnTestcases').className = "py-3 px-4 border-b-2 border-cyan-400 text-cyan-300 font-semibold flex items-center gap-2";
+      }
+      lucide.createIcons();
+    }
+
+    // Tkinter Calculator Logic
+    let calcVal = '0';
+    let calcPrev = null;
+    let calcOperator = null;
+    let calcClearNext = false;
+
+    function updateCalcDisplay() {
+      document.getElementById('calcScreen').innerText = calcVal;
+      document.getElementById('calcHistory').innerText = calcPrev !== null ? `${calcPrev} ${calcOperator}` : '';
+    }
+    function calcNum(d) {
+      if (calcVal === '0' || calcClearNext) {
+        calcVal = String(d);
+        calcClearNext = false;
+      } else {
+        calcVal += d;
+      }
+      updateCalcDisplay();
+    }
+    function calcOp(op) {
+      calcPrev = parseFloat(calcVal);
+      calcOperator = op;
+      calcClearNext = true;
+      updateCalcDisplay();
+    }
+    function calcEqual() {
+      if (calcOperator === null || calcPrev === null) return;
+      const current = parseFloat(calcVal);
+      let res = 0;
+      switch (calcOperator) {
+        case '+': res = calcPrev + current; break;
+        case '-': res = calcPrev - current; break;
+        case '*': res = calcPrev * current; break;
+        case '/': res = current !== 0 ? calcPrev / current : 'Error'; break;
+      }
+      calcVal = String(res);
+      calcPrev = null;
+      calcOperator = null;
+      calcClearNext = true;
+      updateCalcDisplay();
+    }
+    function calcClear() {
+      calcVal = '0';
+      calcPrev = null;
+      calcOperator = null;
+      calcClearNext = false;
+      updateCalcDisplay();
+    }
+    function openCalcModal() {
+      document.getElementById('calcModal').classList.remove('hidden');
+    }
+    function closeCalcModal() {
+      document.getElementById('calcModal').classList.add('hidden');
+    }
+
+    // Resume Modal & Download
+    function openResumeModal() {
+      document.getElementById('resumeModal').classList.remove('hidden');
+      lucide.createIcons();
+    }
+    function closeResumeModal() {
+      document.getElementById('resumeModal').classList.add('hidden');
+    }
+    function downloadResume() {
+      const a = document.createElement('a');
+      a.href = 'public/Tejashwini_Suresh_Sonnad_Resume.pdf';
+      a.download = 'Tejashwini_Suresh_Sonnad_Resume.pdf';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+
+    // Email Copy Helper
+    function copyEmail() {
+      navigator.clipboard.writeText('sonnadtejashwini@gmail.com');
+      const textSpan = document.getElementById('copyEmailText');
+      textSpan.innerText = 'Copied!';
+      textSpan.classList.add('text-emerald-400');
+      setTimeout(() => {
+        textSpan.innerText = 'Copy Email';
+        textSpan.classList.remove('text-emerald-400');
+      }, 2500);
+    }
+
+    // Contact Form Handler
+    function handleContactSubmit(e) {
+      e.preventDefault();
+      const name = document.getElementById('formName').value;
+      const email = document.getElementById('formEmail').value;
+      const subject = document.getElementById('formSubject').value;
+      const message = document.getElementById('formMessage').value;
+
+      const mailtoUrl = `mailto:sonnadtejashwini@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(
+        `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`
+      )}`;
+      window.location.href = mailtoUrl;
+    }
+  </script>
+
+  <!-- Vite module entry script for development mode -->
+  <script type="module" src="/src/main.jsx"></script>
+</body>
+</html>
